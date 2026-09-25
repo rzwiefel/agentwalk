@@ -2,7 +2,7 @@
 
 The checked-in `parser/python/fixtures` and tests provide a reproducible
 validation target without disclosing or depending on another repository.
-Run commands from the Codewalk checkout with `python3 -B` and
+Run commands from the Agentwalk checkout with `python3 -B` and
 `PYTHONDONTWRITEBYTECODE=1` to avoid bytecode writes to the input tree.
 
 ## Reproducible checks

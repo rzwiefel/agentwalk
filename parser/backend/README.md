@@ -1,4 +1,4 @@
-# Codewalk backend parser bridge
+# Agentwalk backend parser bridge
 
 The Clojure API in `src/codewalk/parser.clj` is the backend boundary for the
 standalone parser stack. It starts one short-lived dispatcher subprocess per
@@ -22,7 +22,7 @@ request bodies at 1 MiB, adapter output at 256 MiB, and parser timeouts at
 
 ## Dispatcher boundary
 
-The bridge invokes this exact command shape from the Codewalk repository root:
+The bridge invokes this exact command shape from the Agentwalk repository root:
 
 ```text
 python3 -B -m parser.orchestration.dispatcher capabilities <repo-root>
@@ -30,7 +30,7 @@ python3 -B -m parser.orchestration.dispatcher analyze <repo-root> [--adapter <na
 ```
 
 The dispatcher owns adapter selection, native adapter subprocesses, shared IR
-normalization, and CodeGraph-v2 projection. The bridge only maps the
+normalization, and graph-v2 projection. The bridge only maps the
 dispatcher envelope to the HTTP contract:
 
 ```json

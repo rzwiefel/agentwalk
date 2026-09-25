@@ -1,4 +1,4 @@
-# Live activity implementation notes
+# Live Activity implementation notes
 
 This technical handoff is repository-neutral. For startup and current parser
 capabilities, see `README.md` and `PROJECT_BRIEF.md`; for activity event
@@ -12,7 +12,7 @@ tracked documentation.
    signals; `producer/src/contract.mjs` derives bounded envelopes and
    `producer/src/redact.mjs` redacts sensitive strings.
 2. `src/codewalk/activity.clj` validates a strict allowlist and serves an
-   authenticated local stream. `src/codewalk/activity_archive.clj` provides
+   authenticated local stream; `src/codewalk/activity_archive.clj` provides
    **opt-in** recording with bounded retention.
 3. `src/activity/contract.ts` validates again in the viewer;
    `src/activity/reducer.ts` computes bounded transient signals.
@@ -21,11 +21,16 @@ tracked documentation.
    `src/components/GraphCanvas.tsx` render separate activity glyphs,
    project/file groups, rays, pulses, and web/tool groups.
 
-Live mode can show multiple local workspaces together. Graph resolution and
+Live Activity shows sessions from all workspaces together. Graph resolution and
 recording replay remain workspace-aware; an event for a different repository
 must stay visible as unmapped activity instead of being attached to the
-wrong code node. Agent-to-agent rays require explicit compatible recipient
-identity rather than a guessed cross-workspace match.
+wrong code node. Agent-to-agent rays are produced only by explicitly
+identified `read_agent` and `write_agent` events: reads flow from the recipient
+being read to the reader, and writes flow from the writer to its recipient.
+Cross-workspace rays require an explicit recipient that resolves uniquely to a
+visible agent; no recipient is guessed. Dashed-ray flow animation respects
+reduced-motion preferences. The persisted **Show inactive agents** toggle
+defaults on and affects only inactive agent glyph visibility.
 
 ## Privacy and safety invariants
 

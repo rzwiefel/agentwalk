@@ -2,18 +2,18 @@
 
 The dispatcher is a Python 3.10+ standard-library entry point that detects
 Python, C#, or TypeScript/JavaScript repository signals, runs one native adapter
-as an argv-based subprocess, normalizes its output through the committed
-`codewalk.parser.ir/1` contract, and emits deterministic Codewalk graph
+as an argv-based subprocess, normalizes its output through the
+`codewalk.parser.ir/1` contract, and emits a deterministic Agentwalk graph
 `formatVersion: 2`. The complete normalized IR is retained at the output's
 `ir` key; `--ir-out` can also write that payload separately.
 
 ## Commands
 
-From the Codewalk repository root:
+From the Agentwalk repository root:
 
 ```sh
 python3 -B -m parser.orchestration.dispatcher capabilities /path/to/repo
-python3 -B -m parser.orchestration.dispatcher analyze /path/to/repo --out /tmp/codewalk-graph.json --ir-out /tmp/codewalk-ir.json
+python3 -B -m parser.orchestration.dispatcher analyze /path/to/repo --out /path/to/graph.json --ir-out /path/to/ir.json
 python3 -B -m parser.orchestration.dispatcher analyze /path/to/repo --adapter python
 ```
 
@@ -29,13 +29,14 @@ Defaults are intentionally explicit and portable:
 
 ```sh
 python3 parser/python/python_parser.py --repo-root /path/to/repo
-dotnet run --project parser/csharp/Codewalk.CSharp.csproj -- /path/to/repo --repo-root /path/to/repo
+(cd parser/csharp && dotnet run -- /path/to/repo --repo-root /path/to/repo)
 npm --prefix parser/typescript-javascript run build
 node parser/orchestration/typescript_adapter_bridge.mjs /path/to/repo /path/to/repo/tsconfig.json
 ```
 
 Python needs Python 3.10+. C# needs a compatible .NET SDK/MSBuild and restores
-only the adapter's own project. TypeScript/JavaScript needs Node.js 18+ and a
+only the adapter's own project (`parser/csharp/Codewalk.CSharp.csproj`).
+TypeScript/JavaScript needs Node.js 18+ and a
 one-time build of the checked-in adapter (`typescript` 5.8.3, Apache-2.0;
 `@types/node` 22.15.21, MIT). The bridge loads the native TypeScript adapter's
 compiled `dist/index.js`; its formatVersion-1 output is translated by the

@@ -1,7 +1,7 @@
 # Local Copilot activity producer
 
 This user-scoped, privacy-first producer emits bounded metadata about local
-GitHub Copilot activity to Codewalk's loopback collector. It never changes
+GitHub Copilot activity to Agentwalk's loopback collector. It never changes
 prompts, tool arguments, permissions, agent decisions, or repositories.
 
 ## Verified contracts
@@ -39,50 +39,53 @@ overwriting unrelated settings:
 
 ```sh
 HOME_EXT="${COPILOT_HOME:-$HOME/.copilot}"
-mkdir -p "$HOME_EXT/extensions/codewalk-local-activity"
-cp /path/to/codewalk/producer/extension.mjs "$HOME_EXT/extensions/codewalk-local-activity/"
-cp -R /path/to/codewalk/producer/src "$HOME_EXT/extensions/codewalk-local-activity/"
-cp -R /path/to/codewalk/producer/bin "$HOME_EXT/extensions/codewalk-local-activity/"
+EXTENSION_DIR="$HOME_EXT/extensions/codewalk-local-activity"
+mkdir -p "$EXTENSION_DIR"
+cp /path/to/agentwalk/producer/extension.mjs "$EXTENSION_DIR/"
+cp -R /path/to/agentwalk/producer/src "$EXTENSION_DIR/"
+cp -R /path/to/agentwalk/producer/bin "$EXTENSION_DIR/"
 mkdir -p "$HOME_EXT/hooks"
-cp /path/to/codewalk/producer/hooks/hooks.json "$HOME_EXT/hooks/codewalk-local-activity.json"
+cp /path/to/agentwalk/producer/hooks/hooks.json \
+  "$HOME_EXT/hooks/codewalk-local-activity.json"
 
 export CODEWALK_INGEST_URL=http://127.0.0.1:4180/api/activity/events
 export CODEWALK_ACTIVITY_TOKEN_FILE="$HOME/.codewalk/activity/token"
 ```
 
-The installed hook commands resolve the producer from
+The extension path must remain
 `$COPILOT_HOME/extensions/codewalk-local-activity/` (or
-`$HOME/.copilot/extensions/codewalk-local-activity/`), so they work for every
-session without requiring `CODEWALK_PRODUCER_ROOT` in the parent shell.
-`CODEWALK_PRODUCER_ROOT=/path/to/codewalk/producer` remains useful for the
-one-off smoke test below.
+`$HOME/.copilot/extensions/codewalk-local-activity/`), as the installed hook
+commands resolve the producer from that directory. The producer defaults to
+the loopback endpoint; `CODEWALK_INGEST_URL` overrides it. It reads the shared
+token file at delivery time; `CODEWALK_ACTIVITY_TOKEN` remains available as an
+explicit token override. The token is sent only in the
+`X-Codewalk-Activity-Token` header.
 
 `COPILOT_HOME` is the supported user-state override. `plugin.json` declares
 `hooks/hooks.json` for plugin packaging. The extension directory is discovered
 by the extension runtime. Hook entries provide Unix `bash` and Windows
-`powershell` commands. The producer supports macOS, Linux, and Windows with
-Node.js. A standalone file under `~/.copilot/hooks/` is not sufficient for
-this CLI version unless its contents are also registered in the effective
-global hook configuration.
+`powershell` commands. The producer requires Node.js `>=18` and supports
+macOS, Linux, and Windows. A standalone file under `~/.copilot/hooks/` is not
+sufficient for this CLI version unless its contents are also registered in
+the effective global hook configuration.
 
 Only loopback ingest URLs (`localhost`, `127.0.0.1`, or `::1`) are accepted.
 `npm run dev:live` creates the shared token file with mode 0600. The producer
-reads it at delivery time. `CODEWALK_ACTIVITY_TOKEN` remains available as an
-explicit override; the token is sent only in the
-`X-Codewalk-Activity-Token` header and is never normalized, logged, or spooled.
+reads it at delivery time. `CODEWALK_ACTIVITY_TOKEN_FILE` overrides the
+default token path, and the token is never normalized, logged, or spooled.
 
-When the endpoint is absent or unavailable, events stay in the bounded spool
-at `$CODEWALK_SPOOL_DIR` or `~/.codewalk/activity/events.jsonl` (directory
-0700, file 0600). A collector lock prevents duplicate posting; acknowledgements
-match the complete queued event identity so overlapping provider IDs remain independent.
+When the endpoint is absent or unavailable, events stay in a bounded spool at
+`$CODEWALK_SPOOL_DIR` or `~/.codewalk/activity/events.jsonl` (directory mode
+`0700`, file mode `0600`). A collector lock prevents duplicate posting;
+acknowledgements match the complete queued event identity so overlapping
+provider IDs remain independent.
 Hook completion does not wait for network delivery or fetch
 timeouts. The detached tailer uses the same collector lock and exits after an
 idle period or bounded maximum runtime; transient delivery failures remain in
 the spool for a later tailer/extension retry, while permanent collector
 rejections are acknowledged and dropped one record at a time.
 
-`npm run dev:live -- /path/to/repository` also starts a long-lived,
-read-only compatibility watcher for
+`npm run dev:live` starts a long-lived, read-only compatibility watcher for
 `${COPILOT_HOME:-$HOME/.copilot}/session-state/*/events.jsonl`. It starts at
 EOF for files that already exist, scanning only their skipped prefix to recover
 the latest workspace context. Paths first seen after that startup snapshot
@@ -92,18 +95,17 @@ history. It discovers new session files, tolerates partial JSONL lines and
 rotation/truncation, and advances a line only after `onEvent` accepts it;
 failed enqueues are retried in order. The watcher is bounded by active file
 count, retained file metadata, line size, concurrency, and dedupe memory, and
-exits with Codewalk. These records use `source.kind: "jsonl"` and
+exits with Agentwalk. These records use `source.kind: "jsonl"` and
 `source.client: "unknown"` because local session files do not prove whether a
 record came from the CLI or standalone app. The source is therefore observed
 compatibility coverage, not verified standalone-app extension or hook support.
+No repository path is needed; the watcher observes all workspaces. Passing
+`npm run dev:live -- /path/to/repository` is optional and only preselects the
+default repository for Architecture analysis.
 
-For a one-off hook smoke test:
-
-```sh
-printf '%s\n' '{"sessionId":"demo","timestamp":0,"workingDirectory":".","toolName":"read_file","toolArgs":{"path":"src/main.ts"}}' |
-  CODEWALK_PRODUCER_ROOT="$PWD/producer" CODEWALK_SPOOL_DIR="$PWD/producer/.spool" \
-  node "$PWD/producer/bin/hook.mjs" preToolUse
-```
+For reproducible checks, run the producer's synthetic fixture suite from the
+repository root with `npm --prefix producer test`; do not test by capturing a
+real session.
 
 ## Contract (schema version 1)
 
@@ -149,6 +151,8 @@ not attribute a session to the standalone app.
 
 ## Checks
 
+Run from the repository root:
+
 ```sh
-npm test
+npm --prefix producer test
 ```

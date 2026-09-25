@@ -1,22 +1,30 @@
-# Codewalk roadmap — activity first
+# Agentwalk roadmap — activity first
 
 This is a repository-neutral design backlog, not a record of a particular
 checkout, user session, or private target repository. Check `PROJECT_BRIEF.md`
-and the current code before treating a proposal as unfinished. Live activity
-is the primary view; the architecture explorer remains its code-graph
-substrate. The implementation briefs in
+and the current code before treating a proposal as unfinished. Live Activity
+is the fresh-install default and primary view; Architecture remains a
+supported secondary mode. The implementation briefs in
 `docs/activity-extensibility-plan.md` and
 `docs/activity-extensibility-tasks.md` supply additional design context.
 
 ## 1. Current capabilities
 
-- The architecture explorer supports Clojure, Python, C#, and
-  TypeScript/JavaScript graphs, history playback, and linked analysis views.
+- Architecture supports Clojure, Python, C#, and TypeScript/JavaScript graphs,
+  history playback, and linked analysis views. Architecture-only analysis
+  controls are hidden in Live Activity and remain available in Architecture.
 - The activity pipeline has producer normalization, strict collector and
   frontend allowlists, synthetic cross-layer fixtures, and separate
   workspace-aware graph targeting.
-- Live mode can show multiple local workspaces, agent status and interaction
-  signals, file/tool activity, and transient network/domain groups.
+- Live Activity includes sessions from all workspaces and can show agent
+  status, file/tool activity, and transient network/domain groups. The
+  persisted **Show inactive agents** toggle defaults on and only controls
+  inactive agent glyph visibility.
+- Explicit `read_agent` and `write_agent` events create dashed, colored
+  agent-to-agent rays. Reads flow from the recipient being read to the reader;
+  writes flow from the writer to its recipient. Cross-workspace rays require
+  explicit, uniquely resolved recipients. Reduced-motion preferences suppress
+  dash-flow animation.
 - Recording accepted metadata is opt-in and retention-bounded; it does not
   authorize capture of raw prompts or tool output.
 
@@ -35,8 +43,9 @@ substrate. The implementation briefs in
 
 ### P1 — usability and performance
 
-1. Make activity controls mode-aware while keeping graph analysis controls
-   available in Architecture mode.
+1. Preserve the implemented mode-aware controls: architecture-only analysis
+   controls are hidden in Live Activity and remain available in Architecture
+   mode.
 2. Preserve bounded event, pulse, ray, marker, and completed-tool collections.
    Avoid recomputing layout or allocating render objects every frame when the
    underlying graph has not changed.

@@ -1,14 +1,16 @@
-# Codewalk project brief
+# Agentwalk project brief
 
-This is the durable handoff for Codewalk. Read this file and `README.md` before
+This is the durable handoff for Agentwalk. Read this file and `README.md` before
 making changes. `README.md` is the user-facing guide; the documents below
 contain adapter-specific contracts and implementation details.
 
 ## Mission
 
-Codewalk is a local-first 3D code architecture explorer. It turns source code
-and Git history into a deterministic graph of namespaces/modules, declarations,
-and relationships, then renders that graph as an interactive Three.js scene.
+Agentwalk is a local-first viewer for coding-agent activity, with a supported
+3D code architecture explorer as a secondary mode. Live Activity is the
+primary view on a fresh install. Architecture mode turns source code and Git
+history into deterministic graphs of namespaces/modules, declarations, and
+relationships, then renders those graphs as an interactive Three.js scene.
 Its original Clojure symbol graph is extended to Python, C#, and
 TypeScript/JavaScript through language-neutral parser adapters.
 
@@ -47,13 +49,13 @@ source repository
               React/Vite/Three.js viewer
 ```
 
-- `src/codewalk/analyzer.clj` produces the original Clojure graph.
-- `src/codewalk/history.clj` resolves Git refs, computes changed files/ranges,
+- `src/codewalk/analyzer.clj` produces the original symbol graph.
+- `src/codewalk/history.clj` resolves refs, computes changed files/ranges,
   archives revisions outside the target checkout, and maintains the bounded
   revision cache.
 - `src/codewalk/parser.clj` validates parser requests, starts the dispatcher,
   enforces limits, and maps dispatcher envelopes to HTTP responses.
-- `src/codewalk/server.clj` exposes the repository, graph, temporal, parser, and
+- `src/codewalk/server.clj` exposes repository, graph, temporal, parser, and
   health routes.
 - `parser/orchestration/dispatcher.py` detects or selects an adapter, runs it
   with argv-based subprocess execution, normalizes IR, and projects graph-v2.
@@ -71,29 +73,38 @@ Requirements:
 
 - Node.js `^20.19.0 || >=22.12.0` and npm for the root Vite viewer. The
   TypeScript/JavaScript adapter itself supports Node.js `>=18`.
-- Clojure CLI and JDK 17+ for the API and Clojure indexing.
-- Python 3.10+ for the dispatcher and Python adapter.
-- .NET 9 SDK/MSBuild for the C# adapter.
-- Git, Bash, and curl.
+- Clojure CLI and JDK 17+ for the API and Clojure indexing; Bash and curl for
+  the `dev:live` launcher.
+- Git for Git-backed repository history and live repository features.
+- Python 3.10+ and .NET 9 SDK/MSBuild are optional runtimes for the Python and
+  C# Architecture adapters.
 
-Install dependencies from the repository root and for the nested TypeScript
-adapter:
+Install the core viewer dependencies from the repository root:
 
 ```sh
 npm install
-npm --prefix parser/typescript-javascript install
-dotnet restore parser/csharp/Codewalk.CSharp.csproj
 ```
 
-For separate local services:
+Build the TypeScript/JavaScript adapter only when using that optional
+Architecture analysis path:
+
+```sh
+npm --prefix parser/typescript-javascript install
+npm --prefix parser/typescript-javascript run build
+```
+
+For separate local services in observer mode:
 
 ```sh
 # Terminal 1: API
-npm run serve -- --repo-root /path/to/repository
+npm run serve
 
 # Terminal 2: viewer (default port is 4173)
 npm run dev
 ```
+
+To preselect a repository for Architecture analysis, optionally add
+`--repo-root /path/to/repository` to the API command.
 
 The API listens on `http://127.0.0.1:4180`. The Vite proxy forwards `/api` to
 that port. To use a different viewer port:
@@ -102,16 +113,21 @@ that port. To use a different viewer port:
 npm run dev -- --port 4177
 ```
 
-The one-command workflow starts both services and uses the default viewer port:
+The observer-first one-command workflow starts both services with no repository
+argument and uses the default viewer port:
 
 ```sh
-npm run dev:live -- /path/to/repository
+npm run dev:live
 ```
 
-The API health check is `GET /api/health`. `npm run dev:live` writes the API
-log to `~/.codewalk/runtime/api.log` by default (overridable with
-`CODEWALK_RUNTIME_DIR`) and stops its API child when the viewer exits. Parser
-adapters are short-lived subprocesses; they are not persistent backend servers.
+The API health check is `GET /api/health`. `npm run dev:live` starts both
+services and stops its API child when the viewer exits. The API log defaults to
+`~/.codewalk/runtime/api.log`; `CODEWALK_RUNTIME_DIR` overrides the runtime
+directory. Runtime data stays outside analyzed repositories. Parser adapters
+are short-lived subprocesses; they are not persistent backend servers. Passing
+`npm run dev:live -- /path/to/repository` is optional and preselects the
+default repository for Architecture analysis; activity collection still
+observes all workspaces.
 
 ## Parser modes
 
@@ -150,10 +166,11 @@ The Clojure API exposes:
   runtime availability, adapter commands, and ambiguity information.
 - `POST /api/parser/analyze`: parser graph analysis.
 
-Activity recording is opt-in (`CODEWALK_ACTIVITY_CAPTURE=true` or
-`--activity-capture true`) and writes only events accepted by the existing
-metadata validator. The default archive is
-`~/.codewalk/runtime/activity-log`, outside analyzed repositories; its
+Activity recording is opt-in with `CODEWALK_ACTIVITY_CAPTURE=true` or
+`--activity-capture true` and writes only events accepted by the existing
+metadata validator. The archive defaults to
+`~/.codewalk/runtime/activity-log`, overridable with `CODEWALK_ACTIVITY_LOG_DIR`
+or `--activity-log-dir`; it remains outside analyzed repositories. Its
 `index.json` references per-recording `manifest.json` and `events.jsonl`
 files. Recording manifests are format/schema version 1, retain bounded
 session/workspace summaries, and use the `activity-metadata-v1` redaction
@@ -161,6 +178,9 @@ policy. Retention defaults to 20 recordings, 100,000 events, 100 MiB, and
 14 days. Recording pages are authenticated with the same activity token and
 origin checks as live activity, and their authoritative `recordingSequence`
 never reuses live `streamSequence`.
+
+The live activity token defaults to `~/.codewalk/activity/token`;
+`CODEWALK_ACTIVITY_TOKEN` or `--activity-token` supplies an explicit token.
 
 The parser request body accepts:
 
@@ -252,12 +272,15 @@ Known correctness/product limitations:
   namespace/module candidates and rejecting expression-shaped names while
   preserving legitimate dotted module names. No implementation has started.
 
-The future roadmap is in `docs/codewalk-opus-5-brainstorm.md`; it is
+The future ideas backlog is in `docs/agentwalk-future-ideas.md`; it is
 aspirational and not a substitute for the current implementation documents.
 
 ## Active workline: live agent activity
 
-The repository-neutral **Live activity** mode is implemented. Copilot CLI
+The repository-neutral **Live Activity** mode is implemented and is the
+primary view on a fresh install; **Architecture** remains supported as a
+secondary mode. Architecture-only analysis controls are hidden in Live
+Activity, not removed. Copilot CLI
 `1.0.81-12` is verified end to end through the user extension/hooks producer,
 authenticated local collector/SSE stream, bounded frontend reducer, graph
 resolver, pulses, and activity panel. Standalone Copilot app support remains
@@ -286,17 +309,22 @@ IDs, turn IDs, tool-call IDs, provider/source identity, and ordering metadata
 remain distinct so concurrent sessions are not collapsed.
 
 `workspaceId` (repository/worktree) and `sourceId` (language/project graph)
-remain separate from session and agent identity. Addressable agent events may
-draw bounded, event-colored rays between agent glyphs; file/tool activity rays
-continue to target project, directory, and file groups on the separated
-hierarchy plane. Unknown or cross-workspace targets remain visible as
-unmapped activity rather than being guessed across repositories. Session
-names are shown as the primary agent glyph label when a local session metadata
-sidecar provides one, with the stable agent ID retained as secondary identity.
-Session filters exist (`src/components/ActivityPanel.tsx:143-160`); legends and
-bidirectional controls remain future work.
+remain separate from session and agent identity. Explicit `read_agent` and
+`write_agent` events draw bounded, dashed, event-colored rays between agent
+glyphs: reads flow from the recipient being read to the reader, and writes
+flow from the writer to its recipient. Dashed flow animation respects reduced
+motion preferences. Cross-workspace rays require an explicit recipient that
+resolves uniquely to a visible agent; unknown, ambiguous, or unmatched
+cross-workspace targets are not guessed. File/tool activity rays continue to
+target project, directory, and file groups on the separated hierarchy plane.
+The persisted **Show inactive agents** toggle defaults on and only controls
+inactive agent glyph visibility. Session names are shown as the primary agent
+glyph label when a local session metadata sidecar provides one, with the stable
+agent ID retained as secondary identity. Session filters exist
+(`src/components/ActivityPanel.tsx:143-160`); legends and bidirectional
+controls remain future work.
 
-Live activity subscribes to all workspaces so sessions across repositories
+Live Activity subscribes to all workspaces so sessions across repositories
 remain visible together. Graph-node resolution stays workspace-aware, while
 recording replay remains scoped to the loaded graph's workspace.
 
@@ -305,23 +333,19 @@ recording replay remains scoped to the loaded graph's workspace.
 Run checks from the repository root:
 
 ```sh
+npm run check
 npm run build
-npm --prefix producer test
 npm --prefix parser/typescript-javascript test
 python3 -B -m unittest discover -s parser/python/tests -p 'test_*.py'
 python3 -B -m unittest discover -s parser/conformance/tests -p 'test_*.py'
 python3 -B -m unittest discover -s parser/projection/tests -p 'test_*.py'
 python3 -B -m unittest discover -s parser/orchestration/tests -p 'test_*.py'
 dotnet run --project parser/csharp/Codewalk.CSharp.csproj -- --self-test
-clojure -Sdeps '{:paths ["src" "test"]}' -M -e \
-  '(require (quote codewalk.parser-test)) (let [result (clojure.test/run-tests (quote codewalk.parser-test))] (when (pos? (+ (:fail result) (:error result))) (System/exit 1)))'
-clojure -Sdeps '{:paths ["src" "test"]}' -M -e \
-  '(require (quote codewalk.activity-test)) (let [result (clojure.test/run-tests (quote codewalk.activity-test))] (when (pos? (+ (:fail result) (:error result))) (System/exit 1)))'
 ```
 
-The current focused Clojure suite is `test/codewalk/parser_test.clj`. The
-adapter-specific contracts and commands are documented in
-`parser/{python,csharp,typescript-javascript}/README.md`,
+The integrated check includes the Clojure suites `codewalk.parser-test` and
+`codewalk.activity-test` under `test/codewalk/`. Adapter-specific contracts
+and commands are documented in `parser/{python,csharp,typescript-javascript}/README.md`,
 `parser/shared/README.md`, `parser/projection/README.md`, and
 `parser/orchestration/README.md`.
 

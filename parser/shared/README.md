@@ -63,14 +63,13 @@ From the repository root:
 python3 -B -m unittest discover -s parser/conformance/tests -p 'test_*.py'
 python3 -B parser/conformance/run_conformance.py
 python3 -B parser/shared/ir.py parser/conformance/fixtures/python.json \
-  --adapter python --out /tmp/codewalk-parser-ir.json
+  --adapter python --out /path/to/parser-ir.json
 ```
 
 Dependencies: Python 3.10+ standard library only; no package install is
-required. The contract runtime is MIT-licensed by the repository's existing
-project metadata. JSON Schema is a type/shape representation; the executable
-validator additionally enforces path safety, endpoint references, category
-rules, coordinate declarations, and deterministic normalization.
+required. JSON Schema is a type/shape representation; the executable validator
+additionally enforces path safety, endpoint references, category rules,
+coordinate declarations, and deterministic normalization.
 
 The runtime does not parse source code, resolve symbols, or convert native
 offsets between encoding units because those operations require source text and

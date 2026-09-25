@@ -6,18 +6,18 @@
 ## Goal
 
 Add a live visualization of local Copilot activity while it works in any
-repository. File reads and edits should activate the corresponding Codewalk
+repository. File reads and edits should activate the corresponding graph
 nodes and hierarchy volumes using the existing pulse/shockwave language.
 Commands, tool calls, agent/subagent state, and concise privacy-filtered details
 should appear alongside the graph.
 
 ## Repository decision
 
-The current recommendation is to implement this **inside Codewalk as a separate
-`activity` visualization mode**, not as a new renderer or a replacement for
-architecture/history mode.
+This ships **inside Agentwalk with Live Activity as the primary view**.
+Architecture remains supported as a secondary mode, not a replaced renderer or
+removed feature.
 
-Codewalk already provides the expensive reusable parts:
+Agentwalk already provides the expensive reusable parts:
 
 - repository-neutral parsing and deterministic graph identities;
 - stable layout positions and hierarchy volumes;
@@ -32,7 +32,7 @@ and normalization should remain separable from the renderer so a future agent
 source can be added without changing visualization semantics.
 
 The producer and local collector should be independently packaged inside this
-repository while the visualization remains a Codewalk mode.
+repository while the visualization remains an Agentwalk mode.
 
 ## Locked scope
 
@@ -42,7 +42,7 @@ repository while the visualization remains a Codewalk mode.
 - Local sessions in the standalone GitHub Copilot app, pending runtime
   compatibility verification.
 - Arbitrary local repositories, remotes, branches, languages, worktrees, and
-  folders supported by Codewalk.
+  folders supported by Agentwalk.
 - File read/edit activity only when explicitly reported by the producer.
 - Tool and shell-command lifecycle with short, privacy-preserving summaries.
 - Agent, subagent, session, waiting, completion, and failure state.
@@ -75,7 +75,7 @@ Copilot CLI / Copilot app local session
                 |
    local collector / bounded spool
                 |
-      Codewalk activity stream
+      Agentwalk activity stream
                 |
  activity reducer + graph resolver
                 |
@@ -100,14 +100,14 @@ results, code, and paths, so it must remain off by default.
 
 For ordinary already-running or missed-hook sessions, use a read-only tail of
 Copilot's local append-only event log as a compatibility source. A public
-SDK/ACP source is preferable when Codewalk launches and owns the Copilot
+SDK/ACP source is preferable when Agentwalk launches and owns the Copilot
 session. Internal file/database readers must be isolated behind versioned
 adapters and treated as compatibility surfaces, not as the canonical activity
 contract.
 
 SSE is the current transport recommendation from the local collector to the
 browser because activity is primarily one-way, reconnectable, and compatible
-with Codewalk's current local server.
+with Agentwalk's current local server.
 
 ## Confirmed local sources
 
@@ -179,14 +179,14 @@ only; storing or displaying raw conversation/tool content must require explicit
 opt-in, bounded retention, clear redaction controls, and local-only storage.
 
 Viewing a conversation and controlling an agent are separate capabilities.
-Bidirectional interaction is most credible when Codewalk launches and owns a
+Bidirectional interaction is most credible when Agentwalk launches and owns a
 Copilot process through a supported SDK or Agent Client Protocol connection.
 There is no assumed stable API for attaching controls to an arbitrary
 already-running CLI or app session. Preserve a replaceable session-driver
 boundary and leave room for a command channel, but do not implement chat input,
 approvals, cancellation, or agent steering in the visualization MVP.
 
-## Likely Codewalk surfaces
+## Likely implementation surfaces
 
 - `src/App.tsx`: mode selection and high-level lifecycle.
 - `src/graph.ts`: reusable file/span/node/group indexes.
@@ -236,8 +236,8 @@ reviewable, with explicit ownership of shared files and cross-layer tests.
 - A bounded, read-only JSONL compatibility watcher now tails
   `${COPILOT_HOME:-$HOME/.copilot}/session-state/*/events.jsonl` when
   `dev:live` runs. It starts at EOF, discovers new files, handles partial
-  lines and rotation/truncation, filters to the selected workspace, and emits
-  only normalized schema-v1 metadata/resources with
+  lines and rotation/truncation, tracks workspace attribution across
+  workspaces, and emits only normalized schema-v1 metadata/resources with
   `source.kind: "jsonl"` and `source.client: "unknown"`.
 
 ## Known JSONL watcher limitations
@@ -258,7 +258,7 @@ reviewable, with explicit ownership of shared files and cross-layer tests.
 
 ## High-priority expansion: collection mode
 
-The next implementation must support one live Codewalk session containing
+The next implementation must support one Live Activity session containing
 multiple codebases and/or multiple language analyses. Examples include Python
 and TypeScript graphs for one repository, or several repositories/worktrees
 that a Copilot session visits. This is a collection feature, not a change to
@@ -539,23 +539,27 @@ manually integrated against the dirty master file unless its worker diff is
 proven disjoint. After each validated step, follow the master safety gate above
 and report the exact integrated SHA/path before proceeding.
 
-## Current startup defaults
+## Current startup behavior
 
-Until collection mode generalizes the startup flow, initialize the viewer with:
+Until collection mode generalizes the startup flow, the viewer opens with:
 
-- `viewMode: 'activity'`, so the telemetry stream is enabled immediately;
-- repository path: the configured Codewalk checkout for the current run, without
-  assuming a user-specific absolute path;
+- `viewMode: 'activity'`, so Live Activity is the fresh-install default and
+  the telemetry stream is enabled immediately;
+- the repository path selected for the current run; do not commit a
+  machine-specific absolute path;
 - canonical TypeScript analysis mode (`typescript-javascript`, displayed as
   TypeScript / JavaScript and accepted as the current `typescript` default).
 
-These are initial React state values only. User changes must remain authoritative
-and must not be overwritten by effects, repository loads, stream reconnects, or
-later collection-mode initialization. The existing demo graph remains the
-fixture for tests only; the startup constellation is intentionally empty with
-zero graph stats until the user clicks Analyze. Startup activity connection
-uses the default repository workspace identity, so telemetry UI remains live
-while graph targets are unavailable.
+Architecture remains supported as a secondary mode; architecture-only analysis
+controls are hidden in Live Activity rather than removed. The persisted
+**Show inactive agents** toggle defaults on and only controls inactive glyphs.
+These are initial React state values only. User changes must remain
+authoritative and must not be overwritten by effects, repository loads, stream
+reconnects, or later collection-mode initialization. The existing demo graph
+remains the fixture for tests only; the startup constellation is intentionally
+empty with zero graph stats until the user clicks Analyze. Live Activity
+subscribes across workspaces, so telemetry remains live while graph targets are
+unavailable.
 
 ## Tool-group snippet markers
 
@@ -587,7 +591,8 @@ The current activity overlay renders distinct non-box agent glyphs from stable
 workspace/session/agent identities. The ring of active agents sits above the
 bash/per-tool boxes on the operator plane; inactive agents move to a separate
 upper ring after ten minutes. Agents and tool groups remain separate from the
-project/directory/file hierarchy plane.
+project/directory/file hierarchy plane. Live Activity subscribes to sessions
+from all workspaces.
 
 - **Activity identity:** preserve stable opaque `sessionId`, `agentId`, parent
   agent/session IDs, turn IDs, and tool-call IDs through normalization and
@@ -609,12 +614,14 @@ project/directory/file hierarchy plane.
   workspace and path/span evidence support it. Session/agent identity is
   attached to pulses and event rows, not silently encoded into persistent
   `CodeGraph` node IDs.
-- **Agent rays:** addressable agent events may render a bounded event-colored
-  ray from a sender glyph to a recipient glyph. Resolve both endpoints only
-  within allowed workspace/source/session scopes so concurrent agents and
-  cross-repository sessions cannot collapse or cross-link. Reuse the transient
-  ray contract: event color, 30-second expiry, event/target deduplication, and
-  active-ray caps.
+- **Agent rays:** only explicitly identified `read_agent` and `write_agent`
+  events create bounded, dashed, event-colored rays. A read ray runs from the
+  recipient being read to the reader; a write ray runs from the writer to its
+  recipient. Cross-workspace rays require an explicit recipient that resolves
+  uniquely to a visible agent; ambiguous or unmatched recipients are not
+  guessed. Dashed-flow animation respects reduced-motion preferences. Rays
+  retain the transient overlay contract: 30-second expiry, event/target
+  deduplication, and active-ray caps.
 - **UI filtering/legend:** session/subagent filters and a dedicated legend remain
   future work. The eventual legend must distinguish repository/source groups
   from session/agent overlays and show unknown or unattributed state rather than

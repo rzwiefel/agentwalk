@@ -1,21 +1,24 @@
-# Codewalk future ideas
+# Agentwalk future ideas
 
 This is an aspirational roadmap, not the current implementation contract.
-For the current architecture, commands, parser limitations, and known issues,
-see [`../PROJECT_BRIEF.md`](../PROJECT_BRIEF.md) and [`../README.md`](../README.md).
+Live Activity is the primary view and Architecture remains supported as a
+secondary mode. For current behavior, setup, parser limitations, and known
+issues, see [`../PROJECT_BRIEF.md`](../PROJECT_BRIEF.md) and
+[`../README.md`](../README.md). Some ideas below may already be implemented;
+check those current references before treating a proposal as unfinished.
 
 Ideas are tagged **[HIGH]** (high-confidence, verified against code),
 **[MED]** (needs validation), or **[SPEC]** (speculative/ambitious).
 
 ---
 
-# 1. What Codewalk should become beyond a map
+# 1. What Agentwalk could become beyond a map
 
 A map answers *"what exists"*. The valuable product answers *"what should I do"*. Four identities, in order of practical payoff:
 
-1. **A change-decision instrument** — "I'm about to touch `codewalk.graph`. What's the blast radius, what co-changes with it historically, which tests cover it, who reviews it?" This is the highest-ROI direction and reuses everything you already have.
-2. **A narrative/onboarding tool** — lean into the name. A "codewalk" should be a **recorded, replayable, shareable guided tour**: an ordered list of (camera pose, selection, filter lens, narration text) that plays like a director's cut through the architecture. Nothing else on the market does this well, and it's cheap given you already have camera + history playback.
-3. **An architecture conformance gate** — declared intent (`.codewalk/architecture.edn`: layers, allowed edges) checked in CI, with a rendered before/after image posted to the PR. This converts Codewalk from "cool demo" to "thing the team can't remove."
+1. **A change-decision instrument** — "I'm about to touch `codewalk.graph`. What's the blast radius, what co-changes with it historically, which tests cover it, who reviews it?" This is the highest-ROI direction and reuses existing graph and history capabilities.
+2. **A narrative/onboarding tool** — a recorded, replayable, shareable guided tour could present an ordered list of camera poses, selections, filter lenses, and narration through an architecture graph.
+3. **An architecture conformance feature** — a future `.codewalk/architecture.edn` manifest could declare layers and allowed edges, with a report and rendered before/after image. Any CI integration or command surface is a future design decision; neither is part of the current setup.
 4. **A static/dynamic reconciler** — overlay actual runtime behavior on the static graph. Divergence is where the interesting bugs live.
 
 **Design principle to adopt now:** every visual claim must be *traceable to a source line*. If a namespace glows red, one click should list the exact `file:line` evidence. This constraint alone will keep the tool honest and prevent it from becoming a "pretty scores" toy.
@@ -94,7 +97,7 @@ One shared selection/hover/filter model. Brush in the scatter → highlights in 
 - **What-if cuts** — mark edges/namespaces as removed, recompute live: "SCC drops from 18 → 4; `codewalk.app` instability 0.9 → 0.6." Sandbox refactors before writing code. **[MED]**
 - **Refactoring candidate queue** — a ranked, dismissible list (split candidates from cohesion, cycle breaks from MFAS, hidden coupling, god-namespaces, dead code), each with evidence and a "why this was flagged" trace. Dismissals persist. **[MED]**
 - **Search/query** — a small filter DSL (`ns:codewalk.* fanout:>10 cycle:true churn:p90`) with saved queries; a Datalog-flavored variant would delight the Clojure audience. **[MED]**
-- **Annotations / bookmarks / saved views** — markdown notes pinned to nodes *and* to points in 3D space; persisted to a repo-committed `.codewalk/` directory so they're reviewable and team-shared.
+- **Annotations / bookmarks / saved views** — markdown notes pinned to nodes *and* to points in 3D space; a future repository-managed `.codewalk/` location could make them reviewable and team-shared.
 - **Guided tours** (see §1) with export to GIF/MP4 and a shareable link. **[HIGH]**
 - **Exports** — PNG/SVG/MP4, Graphviz/Mermaid, DSM CSV, metrics JSON, Markdown report, ADR stub, PR-comment bot.
 - **Editor round-trip** — click node → `vscode://file/...` or `emacsclient`; and a tiny local endpoint so the editor can say "focus the namespace I'm currently in." Very small effort, disproportionate daily value. **[HIGH]**
@@ -162,13 +165,13 @@ One shared selection/hover/filter model. Brush in the scatter → highlights in 
 
 1. **Temporal change coupling + hotspots.** Co-change lift, hidden-coupling detection (co-change with no static edge), churn × complexity 2×2. You already fetch the git data; this is mostly analysis + one 2D panel. Highest insight-per-line-of-code in the list.
 2. **Community detection + hierarchy drift report + DSM panel.** Leiden clustering, compare to namespace prefixes, surface "misplaced namespace" candidates. Ship the partition-sorted DSM alongside — it's the view engineers will screenshot.
-3. **Blast radius + what-if cuts + minimum feedback arc set + revision compare.** The "decision instrument" bundle. Turns Codewalk from observation into planning.
+3. **Blast radius + what-if cuts + minimum feedback arc set + revision compare.** The "decision instrument" bundle. Turns Agentwalk from observation into planning.
 
 *Bonus mediums:* guided tours + saved views + shareable URL state; namespace dossier page.
 
 ### Ambitious / longer term
 
-- **Architecture conformance in CI** — `.codewalk/architecture.edn` declaring layers and allowed edges, a `codewalk check` command, and a PR comment with a rendered drift image. **[SPEC but highest strategic value]** — this is what makes the tool load-bearing.
+- **Architecture conformance** — `.codewalk/architecture.edn` declaring layers and allowed edges, a proposed `codewalk check` command, and a pull-request report with a rendered drift image. CI integration is a future design decision; no workflow is selected or configured. **[SPEC but highest strategic value]** — this is what could make the tool load-bearing.
 - **Runtime overlay** via OTel / `tap>` / nREPL instrumentation: real call counts, latency, exception sites. Static-vs-dynamic divergence finds dead code and surprise hot paths. **[SPEC]**
 - **Multi-repo system view** — multiple repositories in one space, with
   cross-repo namespace relationships and shared-library blast radius.
@@ -213,7 +216,7 @@ Keyword-mention edges are weak, near-ubiquitous, and (via shared vocabularies) t
 
 **I. Fan-out is the wrong proxy for "overdependency." [HIGH]**
 
-Aggregator namespaces (`app`, `system`, `core`, `routes`, `main`) are *supposed* to have high fan-out — that's their job. Your demo result (`codewalk.app` = highest risk) is technically correct and architecturally uninteresting; it's a structural tautology, and users will notice. **Fix:** use Martin's instability `I = Ce/(Ca+Ce)` plus distance from the main sequence; compare fan-out against a *peer group* (same hierarchy depth / same community); and add the genuinely dangerous pattern — **high fan-in × high churn = fragile hub** — which the current formula doesn't capture at all.
+Aggregator namespaces (`app`, `system`, `core`, `routes`, `main`) are *supposed* to have high fan-out — that's their job. Your demo result (`codewalk.app` = highest risk) is technically correct and architecturally uninteresting; users will notice. **Fix:** use Martin's instability `I = Ce/(Ca+Ce)` plus distance from the main sequence; compare fan-out against a *peer group* (same hierarchy depth / same community); and add the genuinely dangerous pattern — **high fan-in × high churn = fragile hub** — which the current formula doesn't capture at all.
 
 **J. Sinks are invisible to betweenness. [HIGH]**
 

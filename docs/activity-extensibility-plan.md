@@ -55,7 +55,7 @@ Copilot hook  →  producer/bin/hook.mjs
                  producer/src/contract.mjs   normalizeHook / normalizeEvent
                  producer/src/paths.mjs      resourcesFrom / inferredActivityResources
                         ↓ bounded spool, POST /api/activity/events
-                 src/codewalk/activity.clj   validate-event  (STRICT ALLOWLIST)
+                 src/codewalk/activity.clj  validate-event  (STRICT ALLOWLIST)
                         ↓ SSE /api/activity/stream
                  src/activity/contract.ts    parseActivityEvent (SECOND ALLOWLIST)
                  src/activity/graphResolver  resolveActivityTarget → ActivityTarget
@@ -101,7 +101,7 @@ the same idea, one running and one not.
 
 ### Finding 2 — The frontend reads resource fields the collector rejects
 
-`src/codewalk/activity.clj:199` defines the permitted keys inside `resources[]`:
+`src/codewalk/activity.clj` defines the permitted keys inside `resources[]`:
 
 ```clojure
 #{:id :name :path :relativePath :ref :kind :status :summary :provider
@@ -114,15 +114,17 @@ column, endColumn, span`.
 
 **`file`, `nodeId`, `line`, `endLine`, `column`, `endColumn`, and `span` are not
 in the collector's allowlist.** An event carrying any of them is rejected whole
-with `400 UNSAFE_EVENT_FIELD` (`validate-safe-map`, `activity.clj:143`), not
+with `400 UNSAFE_EVENT_FIELD` (`validate-safe-map`,
+`src/codewalk/activity.clj:143`), not
 field-stripped.
 
 The same gap exists for metadata. `graphResolver.ts:80-94` (`resourcesFor`)
 synthesizes a resource from `event.metadata.file / .path / .line / .endLine /
-.column / .endColumn`, but `metadata-fields` (`activity.clj:203`) contains
-neither `:file` nor `:path`, and `safe-field-specs` (`activity.clj:98`) has no
-`:file` entry at all. `event.workspace.file` is likewise absent from
-`workspace-fields` (`activity.clj:195`).
+.column / .endColumn`, but `metadata-fields`
+(`src/codewalk/activity.clj:203`) contains neither `:file` nor `:path`, and
+`safe-field-specs` (`src/codewalk/activity.clj:98`) has no `:file` entry at
+all. `event.workspace.file` is likewise absent from
+`workspace-fields` (`src/codewalk/activity.clj:195`).
 
 **Consequence: `match: 'span'` and `match: 'node'` resolution — the top two
 branches of `resolveActivityTarget` (`graphResolver.ts:270-307`) — are
@@ -199,31 +201,35 @@ needs a geometry branch keyed on `group.activity.kind`.
 > that same walk today, not stacked at the origin. The `GroupVolume` geometry
 > branch is still open work.
 
-### Finding 5 — Schema drift is silent and unobservable
+### Finding 5 — Historical: schema drift was silent and unobservable
 
-`producer/src/transport.mjs:82-88`: any 4xx from the collector is treated as
-permanently rejected, the record is acknowledged (dropped), and the loop
-continues. The comment is explicit that response bodies are never retained. The
-collector logs no event bodies by design (`activity.clj` docstring).
+At the time of the original review, any 4xx from the collector was treated as
+permanently rejected, the record was acknowledged (dropped), and the loop
+continued without a diagnostic. Event bodies were never retained, by design.
 
-**Net effect: if you add a field the collector does not allow, the event
-silently vanishes and nothing anywhere reports it.** Given Finding 2 shows the
-three allowlists have *already* drifted apart, this is the single highest-value
-fix before either capability is attempted.
+At that time, adding a field the collector did not allow silently dropped the
+event. Finding 2 records the allowlist drift that made this a high-priority
+fix.
 
-### Finding 6 — Frontend test suites are never executed
+**Update:** permanent collector rejections now produce bounded diagnostics;
+the producer records status, code, and field names without retaining event or
+response content.
+See `docs/roadmap.md` for current maintenance priorities.
 
-`src/activity.test.ts` exports `runActivityAssertions()` and
-`src/activity/parsers.test.ts` exports `runActivityParserAssertions()`. Nothing
-calls either. `package.json` has no `test` script; `npm run build` is
-`tsc --noEmit && vite build`, so these files are typechecked but never run.
+### Finding 6 — Historical: frontend test suites were not executed
+
+At the time of the original review, `src/activity.test.ts` exported
+`runActivityAssertions()` and `src/activity/parsers.test.ts` exported
+`runActivityParserAssertions()`, but no test runner called them. The root
+package had no `test` script, so `npm run build` typechecked but did not run
+these suites.
 `src/layout.test.ts`, `src/history.test.ts`, `src/graphPresentation.test.ts`,
 `src/namespaceMetrics.test.ts`, and `src/namespaceVisibility.test.ts` are in the
 same state.
 
-The Clojure suite (`test/codewalk/activity_test.clj`, 21 `deftest`s) and the
-producer suite (`producer/test/producer.test.mjs`, node:test, ~45 tests) both
-run. The frontend is the untested link, and it is where both capabilities land.
+**Update:** frontend tests now run through the root test script. `npm run check`
+runs the type check, frontend, producer, and Clojure suites; `npm run build`
+also validates the Vite production bundle.
 
 ### Finding 7 — Multi-target was specified and never built
 
@@ -245,11 +251,12 @@ was already agreed to.
   `providerMessageId`, `errorClassification`, `errorCode`, and the boolean
   `contentAvailable`. Nothing looks at `payload.result`, `.output`,
   `.toolResult`, `.exitCode`, or `.stdout`.
-- `activity.clj:94` `sensitive-fields` hard-rejects `:output :result :command
-  :content :prompt :message :arguments :code :headers :env` anywhere in a
+- `src/codewalk/activity.clj:94` `sensitive-fields` hard-rejects
+  `:output :result :command :content :prompt :message :arguments :code :headers
+  :env` anywhere in a
   metadata/workspace/resource map, with `UNSAFE_EVENT_CONTENT`.
-- `validate-content` (`activity.clj:230-268`) allows the envelope's `content`
-  **only** as a reference map:
+- `validate-content` (`src/codewalk/activity.clj:230-268`) allows the
+  envelope's `content` **only** as a reference map:
   `{availability, localRef, localReference, mimeType, size, sha256, redacted}`.
   This is the intended content-by-reference extension point. **Nothing produces
   it and nothing consumes it.**
@@ -264,8 +271,8 @@ was already agreed to.
 - `ActivityToolState` (`types.ts:190-199`) has `status` but no `durationMs`,
   exit code, result size, or match count.
 
-**Good news again:** `metadata-fields` (`activity.clj:203`) already permits
-`:durationMs`, `:count`, `:status`, `:summary`, `:available`, `:coverage`,
+**Good news again:** `metadata-fields` (`src/codewalk/activity.clj:203`)
+already permits `:durationMs`, `:count`, `:status`, `:summary`, `:available`, `:coverage`,
 `:errorClassification`, and `:errorCode`. A large class of derived-from-output
 facts — "rg found 12 matches", "took 340ms", "exited non-zero", "HTTP 500" —
 flows through the existing collector **with no Clojure change**. The correct
@@ -470,7 +477,7 @@ and the frontend parser, asserting all three agree. Options, cheapest first:
 - Export the three allowlists as data and assert set relationships in a single
   test file; **or**
 - Have `producer/test/producer.test.mjs` write representative envelopes to a
-  fixture directory, and have `test/codewalk/activity_test.clj` load and
+  fixture directory, and have the Clojure activity test suite load and
   `validate-event` every one.
 
 The existing `producer-envelope-shape-is-supported` test
@@ -488,8 +495,9 @@ add them to the collector** — span-precise node targeting is the whole point o
 `producer/src/transport.mjs:82-88` should, on a 4xx, increment a counter and
 write a **field-name-only** diagnostic (the collector already returns
 `{"fields": [...]}` in the `UNSUPPORTED_EVENT_FIELD` problem details — see
-`activity.clj:292-296`) to the existing runtime log, never the event body. Without
-this, every task below fails silently when it gets a field name wrong.
+`src/codewalk/activity.clj:292-296`) to the existing runtime log, never the
+event body. Without this, every task below fails silently when it gets a field
+name wrong.
 
 ### T3. Run the frontend tests
 

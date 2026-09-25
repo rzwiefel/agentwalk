@@ -50,12 +50,12 @@ cd producer && npm test
 ```
 
 ```bash
-clojure -Sdeps '{:paths ["src" "test"]}' -M -e "(require (quote codewalk.activity-test)) (require (quote clojure.test)) (clojure.test/run-tests (quote codewalk.activity-test))"
+clojure -M:test
 ```
 
 The `:test` alias puts `test/` on the classpath and runs the activity suite
 directly with `clojure -M:test`. The explicit `-Sdeps` invocation remains
-available when running that namespace in isolation.
+available when running that suite in isolation.
 
 ## Invariants — do not break these
 
@@ -75,7 +75,7 @@ Full list in the plan's closing section. The four that get broken by accident:
 
 Collision hotspots. Nobody edits a file outside their row.
 
-| File | Wave 0 | Wave 1 | Wave 2 | Wave 3 |
+| Area | Wave 0 | Wave 1 | Wave 2 | Wave 3 |
 |---|---|---|---|---|
 | `src/codewalk/activity.clj` | **A0-1** | — | — | — |
 | `test/codewalk/activity_test.clj` | **A0-1** | — | — | — |
@@ -99,17 +99,18 @@ it.
 
 ## A0-1 — Contract conformance test, and fix the drift
 
-**Owns:** `src/codewalk/activity.clj`, `test/codewalk/activity_test.clj`,
-a new fixture directory.
+**Owns:** `src/codewalk/activity.clj` and
+`test/codewalk/activity_test.clj`, plus a new fixture directory.
 
 Read plan Finding 2 first.
 
 The frontend parses resource fields the collector rejects whole with
-`400 UNSAFE_EVENT_FIELD`. `resource-fields` (`activity.clj:199`) lacks `:file`,
-`:nodeId`, `:line`, `:endLine`, `:column`, `:endColumn`, and `:span`;
-`metadata-fields` (`activity.clj:203`) lacks `:file` and `:path`;
-`workspace-fields` (`activity.clj:195`) lacks `:file`. `safe-field-specs`
-(`activity.clj:98`) has no `:file` entry at all.
+`400 UNSAFE_EVENT_FIELD`. `resource-fields` (`src/codewalk/activity.clj:199`)
+lacks `:file`, `:nodeId`, `:line`, `:endLine`, `:column`, `:endColumn`, and
+`:span`;
+`metadata-fields` (`src/codewalk/activity.clj:203`) lacks `:file` and `:path`;
+`workspace-fields` (`src/codewalk/activity.clj:195`) lacks `:file`.
+`safe-field-specs` (`src/codewalk/activity.clj:98`) has no `:file` entry at all.
 
 1. Add the missing keys to `safe-field-specs` and to `resource-fields` /
    `metadata-fields` / `workspace-fields`, with bounds consistent with the
@@ -122,8 +123,9 @@ The frontend parses resource fields the collector rejects whole with
    producer envelopes checked by `validate-event`. Cover at minimum a file read,
    a file write, a shell search, an apply-patch, a session lifecycle event, and
    a tool event with a span.
-3. Do **not** relax `sensitive-fields` (`activity.clj:94`) or
-   `validate-content` (`activity.clj:230`). Those are the privacy boundary.
+3. Do **not** relax `sensitive-fields` (`src/codewalk/activity.clj:94`) or
+   `validate-content` (`src/codewalk/activity.clj:230`). Those are the privacy
+   boundary.
 
 **Done when:** the Clojure suite passes with strictly more assertions than the
 112 baseline, and a resource carrying a line number validates instead of 400ing.
@@ -141,11 +143,12 @@ signal anywhere.
 
 1. On a permanent rejection, record a diagnostic: the HTTP status, the
    `code` (e.g. `UNSUPPORTED_EVENT_FIELD`), and the `fields` array the collector
-   already returns in problem details (`activity.clj:292-296`).
+   already returns in problem details
+   (`src/codewalk/activity.clj:292-296`).
 2. **Field names and codes only. Never the event body, never the response body
    beyond those two keys.** This is a privacy boundary, not just a style rule.
-3. Write it to the existing runtime log location used by `scripts/dev-live.sh`
-   (`${CODEWALK_RUNTIME_DIR:-$HOME/.codewalk/runtime}`), and keep a rejection
+3. Write it to the configured local runtime log location used by
+   `scripts/dev-live.sh`, and keep a rejection
    counter on the transport instance.
 4. Keep the existing behavior: a rejection still drops only that record and the
    loop still continues. Do not add retries.
@@ -213,7 +216,8 @@ the behavior.
 8. Add `ActivityEvent.targets?: ActivityTarget[]`, keeping `target?` as the
    migration field. **Populate nothing yet** — A2-B does the fan-out.
 9. Fix `ActivityEvent.content` (plan B2). It is typed `string` (`types.ts:72`)
-   but the collector validates a reference map (`activity.clj:230-268`). Retype:
+   but the collector validates a reference map
+   (`src/codewalk/activity.clj:230-268`). Retype:
    `{availability?: 'available'|'unavailable'|'redacted'; localRef?: string;
    mimeType?: string; size?: number; sha256?: string; redacted?: boolean}` and
    update `parseActivityEvent` (`contract.ts:422`) to parse it as such instead

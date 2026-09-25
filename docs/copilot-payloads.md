@@ -1,6 +1,6 @@
 # Copilot activity event sources
 
-This is a protocol guide for Codewalk's local activity pipeline. It describes
+This is a protocol guide for Agentwalk's local activity pipeline. It describes
 fields the producer can derive from SDK events, hooks, and session JSONL; it
 contains no observations, paths, identifiers, or counts from actual sessions.
 Event availability can vary by Copilot version. Verify behavior against the
@@ -22,6 +22,12 @@ watcher's `ACTIVITY_TYPES` map additionally translates supported
 `external_tool.*` entries into tool activity. Do not add event names based
 solely on guesses about another SDK version; update the producer, collector,
 frontend contract, and fixtures together.
+
+The viewer creates agent-to-agent rays only from explicitly identified
+`read_agent` and `write_agent` events. Reads flow from the recipient being read
+to the reader; writes flow from the writer to its recipient. Cross-workspace
+rays require an explicit recipient that resolves uniquely to a visible agent;
+the viewer does not infer or guess recipients.
 
 The extension hooks include `preToolUse`, `postToolUse`,
 `postToolUseFailure`, `preMcpToolCall`, session lifecycle, and agent-stop
@@ -62,9 +68,9 @@ through. Keep the event schema closed and derive only named bounded scalars.
 1. Normalize and redact in `producer/src/contract.mjs` and
    `producer/src/redact.mjs`; strip URL userinfo, query, and fragment before
    emitting an external resource reference.
-2. Reject unknown or unsafe fields at the collector
-   (`src/codewalk/activity.clj`), even when the producer is expected to be
-   trusted. Accepted activity recording remains opt-in.
+2. Reject unknown or unsafe fields at `src/codewalk/activity.clj`, even when
+   the producer is expected to be trusted. Accepted activity recording remains
+   opt-in.
 3. Apply the frontend allowlist (`src/activity/contract.ts`) before rendering
    event metadata. Do not reconstruct raw prompts or tool results from
    fallback files.
@@ -73,7 +79,7 @@ through. Keep the event schema closed and derive only named bounded scalars.
    credential-shaped test values; they must not be copied from user sessions.
 
 Run `npm --prefix producer test`, `npm test`, and `clojure -M:test` from the
-Codewalk checkout after changing event shapes. `npm run check` runs the
+Agentwalk checkout after changing event shapes. `npm run check` runs the
 integrated suite. When intentionally changing generated fixtures, run
 `npm run fixtures` and inspect the staged JSON for private data before
 committing it.

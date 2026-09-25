@@ -1,6 +1,6 @@
 # TypeScript/JavaScript parser adapter
 
-This directory is a self-contained semantic parser adapter for Codewalk. It
+This directory is a self-contained semantic parser adapter for Agentwalk. It
 uses the TypeScript compiler API to load a `tsconfig.json` or `jsconfig.json`,
 honor `extends`, `allowJs`, JSX, `baseUrl`, `paths`, package manifests, and
 TypeScript module resolution. With no project file it discovers supported
@@ -20,7 +20,7 @@ changedFiles? })`. The TypeScript source entry point is `src/index.ts`.
 Supported source extensions are `.ts`, `.tsx`, `.mts`, `.cts`, `.js`, `.jsx`,
 `.mjs`, and `.cjs`.
 
-The IR in `src/ir.ts` deliberately does not import Codewalk's shared graph
+The IR in `src/ir.ts` deliberately does not import Agentwalk's shared graph
 schema. It represents modules/packages as `namespace` nodes and declarations
 as `var` nodes, with `requires`, `calls`, `mentions`, `extends`, `implements`,
 `exports`, `reexports`, `overrides`, and `contains` relationships. Every
@@ -71,7 +71,7 @@ ownership, and full-vs-incremental convergence.
 Use `npm test` and the checked-in `fixtures/workspace` as the reproducible
 coverage baseline for package boundaries, JSX, path aliases, JavaScript, and
 CommonJS. For an authorized external project, call `analyzeProject` with its
-root and project file from the Codewalk checkout; do not install packages or
+root and project file from the Agentwalk checkout; do not install packages or
 write generated output into the target without permission. Compare output
 against the fixture contract instead of publishing target-specific paths,
 revision identifiers, diagnostics, or project inventory. Unresolved asset
@@ -80,7 +80,7 @@ analysis to fail.
 
 ## Integration boundary
 
-The Codewalk dispatcher invokes the compiled adapter through
+The Agentwalk dispatcher invokes the compiled adapter through
 `parser/orchestration/typescript_adapter_bridge.mjs`, then translates the IR
 through `parser/shared/ir.py` and `parser/projection/graph_v2.py`. Resolution,
 confidence/provenance, occurrence spans, diagnostics, and extension

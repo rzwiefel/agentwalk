@@ -1,7 +1,7 @@
 # Graph-v2 projection
 
-`graph_v2.project_graph` accepts a validated `codewalk.parser.ir/1` mapping and
-returns deterministic Codewalk `formatVersion: 2`. It emits only
+`graph_v2.project_graph` accepts a validated `codewalk.parser.ir/1` mapping
+and returns a deterministic Agentwalk graph with `formatVersion: 2`. It emits only
 `namespace`, `var`, and `keyword` nodes plus `requires`, `calls`, and `mentions`
 edges. Native occurrence IDs are aggregated into `occurrenceCount` and sorted
 `evidence` entries with repository-relative source locations. External nodes are

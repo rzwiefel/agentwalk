@@ -1,15 +1,16 @@
-# Codewalk C# semantic parser adapter
+# Agentwalk C# semantic parser adapter
 
 This adapter is a practical Roslyn/MSBuild semantic implementation. It is
-deliberately isolated under `parser/csharp` and does not change Codewalk's
+deliberately isolated under `parser/csharp` and does not change Agentwalk's
 shared graph schema or Clojure analyzer. The executable emits a deterministic,
-portable semantic IR (`codewalk-csharp-ir` version 2), which the shared
-dispatcher normalizes and projects into the existing
-namespace/var/requires/calls/mentions graph.
+portable C# semantic IR (schema version 2), which the shared dispatcher
+normalizes and projects into the existing
+namespace/var/requires/calls/mentions graph. Its project file is
+`parser/csharp/Codewalk.CSharp.csproj`.
 
 ## Scope and boundaries
 
-`dotnet run --project parser/csharp/Codewalk.CSharp.csproj -- <input>` accepts:
+Run the adapter from `parser/csharp`; its CLI accepts:
 
 - a `.sln` or `.slnx`, loading every C# project in that solution;
 - a `.csproj`, loading that project and its transitive project references;
@@ -29,14 +30,10 @@ The adapter requires the .NET 9 SDK and an MSBuild installation discoverable by
 `Microsoft.Build.Locator`.
 
 ```sh
-dotnet run --project parser/csharp/Codewalk.CSharp.csproj -- \
-  parser/csharp/fixtures/Codewalk.Sample.sln \
-  --repo-root .
+(cd parser/csharp && dotnet run -- fixtures --repo-root .)
 
-dotnet run --project parser/csharp/Codewalk.CSharp.csproj -- \
-  parser/csharp/fixtures/Codewalk.Sample.sln \
-  --changed parser/csharp/fixtures/Library/Shared.cs \
-  --out /path/to/csharp-ir.json
+(cd parser/csharp && dotnet run -- fixtures \
+  --changed fixtures/Library/Shared.cs --out /path/to/csharp-ir.json)
 ```
 
 `--changed` records file ownership and transitive project invalidation while
@@ -47,7 +44,8 @@ intentionally rewrites the checked-in semantic golden file.
 
 ## IR contract
 
-The root contains `schemaVersion`, engine/version provenance, solution/project
+The root uses the `codewalk-csharp-ir` schema identifier and contains
+`schemaVersion`, engine/version provenance, solution/project
 boundaries, normalized nodes, relationships, occurrence evidence, ownership
 and invalidation, and diagnostics. Namespaces and projects are namespace-like
 containers. Types, classes, interfaces, enums, methods, properties, fields,
@@ -70,12 +68,12 @@ interface implementations are explicit relationships.
 
 ## Comparison and recommendation
 
-| Engine | Strength | Limitation for Codewalk |
+| Engine | Strength | Limitation for Agentwalk |
 | --- | --- | --- |
 | **Roslyn compiler APIs (this adapter)** | Authoritative binding, overloads, project references, metadata symbols, diagnostics, MSBuild configuration, partial/override/interface semantics | Requires a compatible .NET SDK/MSBuild and project restore; workspace loading is heavier |
 | tree-sitter-c-sharp | Fast, portable syntax and excellent error recovery | No compiler binding; project references, overload resolution, aliases, and external symbols require a separate semantic layer |
 | OmniSharp/Roslyn service | Mature language-service features and editor protocol | A long-running external service/protocol is operationally heavier than an in-process indexer |
-| Semantic indexers (e.g. Sourcegraph SCIP) | Portable interchange and prebuilt cross-language indexing workflows | Usually need a language-specific indexer/build environment and can omit source-level evidence useful to Codewalk |
+| Semantic indexers (e.g. Sourcegraph SCIP) | Portable interchange and prebuilt cross-language indexing workflows | Usually need a language-specific indexer/build environment and can omit source-level evidence useful to Agentwalk |
 
 The integrated dispatcher uses Roslyn/MSBuild as the semantic C# backend when a
 compatible SDK is available, retains graceful diagnostics for unloaded
@@ -85,9 +83,14 @@ future mode; it is not currently implemented.
 
 ## Read-only repository validation
 
-Use the checked-in `parser/csharp/fixtures/Codewalk.Sample.sln` and
-`--self-test` for reproducible semantic and incremental checks. For an
-authorized external solution, run the adapter from the Codewalk checkout,
+Use the checked-in `parser/csharp/fixtures/` and `--self-test` for reproducible
+semantic and incremental checks:
+
+```sh
+(cd parser/csharp && dotnet run -- --self-test)
+```
+
+For an authorized external solution, run the adapter from the Agentwalk checkout,
 pass a repository-relative solution path, and write any `--out` file outside
 the target. Avoid restore/build commands in the target unless the owner has
 approved them. Recoverable compilation diagnostics remain visible in emitted

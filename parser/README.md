@@ -1,4 +1,4 @@
-# Codewalk parser adapters
+# Agentwalk parser adapters
 
 This directory contains the integrated non-Clojure parser stack. Clojure remains
 powered by the clj-kondo analyzer under `src/codewalk/`; Python, C#, and
@@ -30,7 +30,7 @@ Every adapter exposes, directly or through normalization:
 - ownership and invalidation metadata for changed files;
 - parser/runtime dependencies and graceful diagnostics.
 
-The normalized vocabulary maps common concepts into the existing Codewalk graph:
+The normalized vocabulary maps common concepts into the existing Agentwalk graph:
 
 | Concept | Normalized representation |
 | --- | --- |

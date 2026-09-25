@@ -1,7 +1,7 @@
-# Codewalk Python parser adapter
+# Agentwalk Python parser adapter
 
 This adapter emits `codewalk.python.ir` format version 2 under `parser/python/`
-and is integrated through the shared dispatcher without changing Codewalk's
+and is integrated through the shared dispatcher without changing Agentwalk's
 flat graph schema. It is a deterministic,
 repository-relative intermediate representation:
 
