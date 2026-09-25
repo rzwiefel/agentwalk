@@ -126,7 +126,7 @@ export const ControlPanel = memo(function ControlPanel(props: ControlPanelProps)
   const showArchitectureControls = architectureControlsVisible(props.viewMode);
   return (
     <aside className="control-panel">
-      <div className="brand"><div className="brand-mark"><span /><span /><span /></div><div><h1>CODEWALK</h1><p>structural navigation</p></div></div>
+      <div className="brand"><div className="brand-mark"><span /><span /><span /></div><div><h1>AGENTWALK</h1><p>structural navigation</p></div></div>
       <section className="mode-switch" aria-label="Visualization mode">
         <span className="eyebrow">Visualization mode</span>
         <div className="mode-switch-buttons">
