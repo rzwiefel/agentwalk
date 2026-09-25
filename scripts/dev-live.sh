@@ -2,15 +2,22 @@
 set -euo pipefail
 
 repo_root="${1:-}"
-if [ -z "$repo_root" ] || [ "$#" -ne 1 ]; then
-  printf 'Usage: npm run dev:live -- /path/to/repository\n' >&2
+if [ "$#" -gt 1 ]; then
+  printf 'Usage: npm run dev:live [-- /path/to/repository]\n' >&2
   exit 1
 fi
-repo_root="$(cd "$repo_root" && pwd)"
 script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+if [ -n "$repo_root" ]; then
+  repo_root="$(cd "$repo_root" && pwd)"
+fi
+
+watcher_workspace_root="$repo_root"
+if [ -z "$watcher_workspace_root" ]; then
+  watcher_workspace_root="$(CDPATH= cd -- "$script_dir/.." && pwd)"
+fi
 
 if ! command -v clojure >/dev/null 2>&1; then
-  printf 'Clojure CLI is required for live repository mode.\n' >&2
+  printf 'Clojure CLI is required for Live Activity.\n' >&2
   exit 1
 fi
 
@@ -40,7 +47,11 @@ export CODEWALK_ACTIVITY_TOKEN
 export CODEWALK_ACTIVITY_TOKEN_FILE="$activity_token_file"
 export CODEWALK_INGEST_URL="${CODEWALK_INGEST_URL:-http://127.0.0.1:4180/api/activity/events}"
 export CODEWALK_ACTIVITY_ORIGINS="${CODEWALK_ACTIVITY_ORIGINS:-http://127.0.0.1:${viewer_port},http://localhost:${viewer_port}}"
-clojure -M:run serve --repo-root "$repo_root" >"$api_log" 2>&1 &
+if [ -n "$repo_root" ]; then
+  clojure -M:run serve --repo-root "$repo_root" >"$api_log" 2>&1 &
+else
+  clojure -M:run serve >"$api_log" 2>&1 &
+fi
 api_pid=$!
 viewer_pid=""
 watcher_pid=""
@@ -81,7 +92,7 @@ until curl -fsS http://127.0.0.1:4180/api/health >/dev/null 2>&1; do
 done
 
 CODEWALK_TAILER_MODE=session-state \
-CODEWALK_WORKSPACE_ROOT="$repo_root" \
+CODEWALK_WORKSPACE_ROOT="$watcher_workspace_root" \
 CODEWALK_SESSION_ALL_WORKSPACES=true \
 CODEWALK_SESSION_STATE_DIR="${COPILOT_SESSION_STATE_DIR:-${COPILOT_HOME:-${HOME}/.copilot}/session-state}" \
 node "$script_dir/../producer/bin/tailer.mjs" >"$watcher_log" 2>&1 &
@@ -93,7 +104,11 @@ if ! kill -0 "$watcher_pid" 2>/dev/null; then
   exit 1
 fi
 
-printf 'Codewalk API is running for %s.\n' "$repo_root"
+if [ -n "$repo_root" ]; then
+  printf 'Codewalk API is running with %s as the default repository.\n' "$repo_root"
+else
+  printf 'Codewalk API is running without a preselected repository; observing all workspaces.\n'
+fi
 printf 'API log: %s\n' "$api_log"
 printf 'Session watcher log: %s\n' "$watcher_log"
 viewer_bin="$(CDPATH= cd -- "$script_dir/.." && pwd)/node_modules/.bin/vite"
