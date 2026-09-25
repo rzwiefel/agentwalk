@@ -1,0 +1,34 @@
+{
+  "id": "hook-94f41f070ca9b0a7338547df6671272ffa5905d0ad055f3dc3cebd232b1bc703",
+  "metadata": {
+    "errorClassification": "tool_execution",
+    "errorCode": "EACCES",
+    "providerEventType": "tool.execution_failure",
+    "providerToolCallId": "call-edit-1"
+  },
+  "resources": [
+    {
+      "action": "write",
+      "confidence": "observed",
+      "path": "src/app/router.ts"
+    }
+  ],
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "edit_file · path=src/app/router.ts",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "failed",
+  "timestamp": "2026-08-28T10:00:10.000Z",
+  "tool": "edit_file",
+  "toolCallId": "call-edit-1",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

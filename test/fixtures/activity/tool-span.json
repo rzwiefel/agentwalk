@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "fixture-tool-span",
+  "sessionId": "fixture-session",
+  "timestamp": "2026-08-28T10:00:05.000Z",
+  "type": "tool",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "sdk",
+    "version": "fixture"
+  },
+  "status": "started",
+  "tool": "read_file",
+  "snippet": "read_file",
+  "metadata": {
+    "providerEventType": "tool.execution_start"
+  },
+  "resources": [
+    {
+      "file": "src/span.clj",
+      "kind": "file",
+      "action": "read",
+      "confidence": "exact",
+      "nodeId": "node-1",
+      "line": 10,
+      "endLine": 12,
+      "column": 2,
+      "endColumn": 8,
+      "span": {
+        "start": {
+          "line": 10,
+          "column": 2
+        },
+        "end": {
+          "line": 12,
+          "column": 8
+        }
+      }
+    }
+  ]
+}

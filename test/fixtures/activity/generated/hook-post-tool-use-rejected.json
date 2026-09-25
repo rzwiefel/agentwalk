@@ -1,0 +1,27 @@
+{
+  "id": "hook-2bf35a45ddb6c44abfd8fa4c879e15d89231f6a35967c0ccb42bcb206caec936",
+  "metadata": {
+    "bytes": 27,
+    "providerEventType": "tool.execution_complete",
+    "providerToolCallId": "call-shell-rejected",
+    "status": "rejected"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "rm -rf /",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "failed",
+  "timestamp": "2026-08-28T10:00:30.000Z",
+  "tool": "bash",
+  "toolCallId": "call-shell-rejected",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@fixture/shared",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./util": "./src/util.ts"
+  }
+}

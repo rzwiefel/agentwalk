@@ -1,0 +1,37 @@
+{
+  "id": "hook-bafb6b7375ff0d88a687f89c573ab61d5a6e76bd6488a6e695fb50cb0ba4c084",
+  "metadata": {
+    "providerEventType": "tool.execution_start",
+    "providerToolCallId": "call-search-1"
+  },
+  "resources": [
+    {
+      "action": "search",
+      "confidence": "observed",
+      "path": "src/app"
+    },
+    {
+      "action": "search",
+      "confidence": "observed",
+      "path": "test"
+    }
+  ],
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "grep · TODO · src/app,test",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:07.000Z",
+  "tool": "grep",
+  "toolCallId": "call-search-1",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

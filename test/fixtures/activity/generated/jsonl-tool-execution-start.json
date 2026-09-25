@@ -1,0 +1,31 @@
+{
+  "agentName": "Luna implementer",
+  "id": "jsonl-tool",
+  "metadata": {
+    "providerEventType": "tool.execution_start"
+  },
+  "resources": [
+    {
+      "action": "read",
+      "confidence": "observed",
+      "path": "src/app/flat.ts"
+    }
+  ],
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "sessionName": "Wave 0 conformance",
+  "snippet": "read_file · src/app/flat.ts",
+  "source": {
+    "client": "unknown",
+    "kind": "jsonl"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:22.000Z",
+  "tool": "read_file",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

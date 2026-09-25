@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "fixture-session-start",
+  "sessionId": "fixture-session",
+  "sessionName": "Wave 0 conformance",
+  "agentName": "Luna implementer",
+  "timestamp": "2026-08-28T10:00:04.000Z",
+  "type": "session",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "fixture"
+  },
+  "agentId": "session:fixture-session",
+  "status": "started",
+  "metadata": {
+    "providerEventType": "session.start"
+  }
+}

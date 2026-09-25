@@ -1,0 +1,23 @@
+{
+  "agentId": "session:fixture-session",
+  "id": "sdk-task-complete",
+  "metadata": {
+    "providerEventType": "session.task_complete",
+    "status": "ok"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "sdk",
+    "version": "1.0.81-fixture"
+  },
+  "status": "task_complete",
+  "timestamp": "2026-08-28T10:00:32.000Z",
+  "type": "session",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

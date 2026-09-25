@@ -1,0 +1,8 @@
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        clj-kondo/clj-kondo {:mvn/version "2024.09.27"}
+        org.clojure/data.json {:mvn/version "2.5.0"}}
+ :aliases {:run {:main-opts ["-m" "codewalk.main"]}
+           :test {:extra-paths ["test"]
+                  :main-opts ["-e"
+                              "(require 'codewalk.activity-test 'codewalk.activity-archive-test 'codewalk.parser-test 'clojure.test) (let [{:keys [fail error]} (clojure.test/run-all-tests #\"codewalk\\..*-test\")] (flush) (System/exit (if (pos? (+ fail error)) 1 0)))"]}}}

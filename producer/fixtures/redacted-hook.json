@@ -1,0 +1,11 @@
+{
+  "sessionId": "session-fixture",
+  "timestamp": 1787770000000,
+  "cwd": "/Users/example/worktree",
+  "toolName": "edit_file",
+  "toolArgs": {
+    "path": "src/secret.ts",
+    "content": "const token = ghp_123456789012345678901234567890123456"
+  },
+  "prompt": "never persisted"
+}

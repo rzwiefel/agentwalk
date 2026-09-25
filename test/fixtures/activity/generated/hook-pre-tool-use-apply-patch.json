@@ -1,0 +1,45 @@
+{
+  "id": "hook-87e83d080ebc510e07e5e3f8115633838de1170870ce897e423c5f3895ee8ea3",
+  "metadata": {
+    "providerEventType": "tool.execution_start",
+    "providerToolCallId": "call-patch-1"
+  },
+  "resources": [
+    {
+      "action": "write",
+      "confidence": "observed",
+      "kind": "file",
+      "path": "src/app/main.ts"
+    },
+    {
+      "action": "write",
+      "confidence": "observed",
+      "kind": "file",
+      "path": "src/app/router.ts"
+    },
+    {
+      "action": "write",
+      "confidence": "observed",
+      "kind": "file",
+      "path": "src/app/store.ts"
+    }
+  ],
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "apply_patch · 3 files",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:05.000Z",
+  "tool": "apply_patch",
+  "toolCallId": "call-patch-1",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

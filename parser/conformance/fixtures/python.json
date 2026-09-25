@@ -1,0 +1,42 @@
+{
+  "format": "codewalk.python.ir",
+  "format_version": 2,
+  "engine": {"name": "python-stdlib-ast", "version": "1.0"},
+  "repository_root": "/checkout/python",
+  "source_roots": ["src"],
+  "nodes": [
+    {"id": "namespace:demo_pkg.service", "kind": "namespace", "name": "demo_pkg.service", "file": "src/demo_pkg/service.py"},
+    {"id": "var:demo_pkg.service.make_service", "kind": "var", "name": "make_service", "qualified_name": "demo_pkg.service.make_service", "file": "src/demo_pkg/service.py", "symbol_kind": "function"},
+    {"id": "var:demo_pkg.models.Service", "kind": "var", "name": "Service", "qualified_name": "demo_pkg.models.Service", "file": "src/demo_pkg/models.py", "symbol_kind": "class"},
+    {"id": "var:external_lib.missing", "kind": "var", "name": "missing", "qualified_name": "external_lib.missing", "external": true}
+  ],
+  "relationships": [
+    ["contains", "namespace:demo_pkg.service", "var:demo_pkg.service.make_service", "resolved"],
+    ["calls", "var:demo_pkg.service.make_service", "var:demo_pkg.models.Service", "resolved"],
+    ["calls", "var:demo_pkg.service.make_service", "var:external_lib.missing", "external"],
+    ["inherits", "var:demo_pkg.models.Service", "var:external_lib.missing", "unresolved"]
+  ],
+  "occurrences": [
+    {
+      "id": "occurrence:call",
+      "node_id": "var:demo_pkg.service.make_service",
+      "file": "src/demo_pkg/service.py",
+      "span": {
+        "file": "src/demo_pkg/service.py",
+        "start": {"line": 1, "column": 0},
+        "end": {"line": 1, "column": 7},
+        "text": "Service"
+      },
+      "role": "reference",
+      "text": "Service"
+    }
+  ],
+  "diagnostics": [],
+  "analysis": {
+    "mode": "incremental",
+    "changed_files": ["src/demo_pkg/models.py"],
+    "deleted_files": ["src/demo_pkg/deleted.py"],
+    "invalidated": ["src/demo_pkg/service.py"],
+    "ownership": {}
+  }
+}

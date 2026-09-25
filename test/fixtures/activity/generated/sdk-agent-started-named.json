@@ -1,0 +1,23 @@
+{
+  "agentName": "Luna implementer",
+  "id": "sdk-agent-started",
+  "metadata": {
+    "providerEventType": "agent.started"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "sessionName": "Wave 0 conformance",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "sdk",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:15.000Z",
+  "type": "agent",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

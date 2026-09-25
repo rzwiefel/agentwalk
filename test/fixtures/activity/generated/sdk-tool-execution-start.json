@@ -1,0 +1,32 @@
+{
+  "id": "sdk-tool-start",
+  "metadata": {
+    "providerEventType": "tool.execution_start",
+    "providerToolCallId": "sdk-call-1"
+  },
+  "resources": [
+    {
+      "action": "read",
+      "confidence": "observed",
+      "path": "src/app/store.ts"
+    }
+  ],
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "read_file · src/app/store.ts",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "sdk",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:16.000Z",
+  "tool": "read_file",
+  "toolCallId": "sdk-call-1",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

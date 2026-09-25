@@ -1,0 +1,24 @@
+{
+  "agentId": "agent-child",
+  "agentName": "Luna reviewer",
+  "id": "hook-503513b96c10afcbbe9a9bf0d88a2ca816b7a02c926b7ce52ff416e305fa35e7",
+  "metadata": {
+    "providerEventType": "agent.completed"
+  },
+  "parentId": "agent-primary",
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "completed",
+  "timestamp": "2026-08-28T10:00:13.000Z",
+  "type": "agent",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

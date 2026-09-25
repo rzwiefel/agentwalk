@@ -1,0 +1,13 @@
+{
+  "name": "@codewalk/local-copilot-activity-producer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Privacy-first local activity producer for GitHub Copilot CLI hooks and SDK sessions",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

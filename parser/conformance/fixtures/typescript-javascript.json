@@ -1,0 +1,23 @@
+{
+  "formatVersion": 1,
+  "root": "/checkout/typescript",
+  "engine": {"name": "typescript-compiler-api", "version": "5.8.3"},
+  "analysis": {
+    "mode": "full",
+    "files": ["packages/app/src/main.tsx"],
+    "changedFiles": [],
+    "invalidatedFiles": [],
+    "ownership": [{"file": "packages/app/src/main.tsx", "nodeIds": [], "edgeIds": []}]
+  },
+  "nodes": [
+    {"id": "namespace:module:packages/app/src/main.tsx", "kind": "namespace", "label": "main.tsx", "file": "packages/app/src/main.tsx"},
+    {"id": "var:component", "kind": "var", "label": "Panel", "varKind": "class", "file": "packages/app/src/main.tsx"},
+    {"id": "package:@fixture/core", "kind": "namespace", "label": "@fixture/core", "external": true}
+  ],
+  "edges": [
+    {"id": "e-import", "kind": "requires", "source": "namespace:module:packages/app/src/main.tsx", "target": "package:@fixture/core", "resolution": "resolved", "confidence": 0.98, "provenance": "import-declaration", "span": {"file": "packages/app/src/main.tsx", "start": 0, "end": 20, "row": 1, "col": 1, "endRow": 1, "endCol": 21}},
+    {"id": "e-jsx", "kind": "mentions", "source": "var:component", "target": "var:unresolved:jsx:section", "resolution": "unresolved", "confidence": 0.3, "detail": {"jsxKind": "intrinsic"}, "span": {"file": "packages/app/src/main.tsx", "start": 21, "end": 28, "row": 1, "col": 22, "endRow": 1, "endCol": 29}},
+    {"id": "e-export", "kind": "reexports", "source": "namespace:module:packages/app/src/main.tsx", "target": "package:@fixture/core", "resolution": "external"}
+  ],
+  "diagnostics": [{"code": "2307", "category": "error", "message": "Cannot find module", "file": "packages/app/src/main.tsx"}]
+}

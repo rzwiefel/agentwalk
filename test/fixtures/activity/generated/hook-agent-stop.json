@@ -1,0 +1,23 @@
+{
+  "agentId": "agent-primary",
+  "agentName": "Luna implementer",
+  "id": "hook-ed08ad2ddefbf06ab0200e2554a068d5a9e20f9b4c87cc6d9dcc179ae67e98d6",
+  "metadata": {
+    "providerEventType": "agent.completed"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "completed",
+  "timestamp": "2026-08-28T10:00:12.000Z",
+  "type": "agent",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

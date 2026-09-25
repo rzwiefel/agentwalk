@@ -1,0 +1,24 @@
+{
+  "agentId": "session:fixture-session",
+  "id": "hook-b6f9247e4270ddf66311d3b0be1e9545b6949c4e9bac1573697acda4c1ee52f5",
+  "metadata": {
+    "contentAvailable": true,
+    "providerEventType": "user.message"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "submitted",
+  "timestamp": "2026-08-28T10:00:02.000Z",
+  "turnId": "turn-1",
+  "type": "prompt",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

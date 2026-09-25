@@ -1,0 +1,23 @@
+{
+  "agentId": "session:fixture-session",
+  "id": "hook-73c11f5d308466b22c2edc538eca1057f26ab69d2f06928f98caf732ea3bf375",
+  "metadata": {
+    "providerEventType": "session.shutdown"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "sessionName": "Wave 0 conformance",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "completed",
+  "timestamp": "2026-08-28T10:00:01.000Z",
+  "type": "session",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

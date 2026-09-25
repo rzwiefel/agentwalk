@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "fixture-apply-patch",
+  "sessionId": "fixture-session",
+  "timestamp": "2026-08-28T10:00:03.000Z",
+  "type": "tool",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "fixture"
+  },
+  "status": "started",
+  "tool": "apply_patch",
+  "snippet": "apply_patch · 1 file",
+  "resources": [
+    {
+      "path": "src/main.clj",
+      "action": "write",
+      "confidence": "observed",
+      "kind": "file"
+    }
+  ],
+  "metadata": {
+    "providerEventType": "tool.execution_start"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "codewalk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:live": "./scripts/dev-live.sh",
+    "index": "clojure -M:run index",
+    "serve": "clojure -M:run serve",
+    "test": "node --experimental-loader='data:text/javascript,import%7BcreateRequire%7Dfrom%27node%3Amodule%27%3Bimport%7BreadFile%7Dfrom%27node%3Afs/promises%27%3Bconst%20ts%3DcreateRequire%28process.cwd%28%29%2B%27/package.json%27%29%28%27typescript%27%29%3Bexport%20async%20function%20resolve%28s%2Cc%2Cn%29%7Bif%28s.startsWith%28%27.%27%29%26%26%21s.endsWith%28%27.ts%27%29%26%26%21s.endsWith%28%27.tsx%27%29%29%7Btry%7Breturn%20await%20n%28s%2Cc%29%7Dcatch%7Bfor%28const%20e%20of%20%5B%27.ts%27%2C%27.tsx%27%5D%29%7Btry%7Breturn%20await%20n%28s%2Be%2Cc%29%7Dcatch%7B%7D%7D%7D%7Dreturn%20n%28s%2Cc%29%7Dexport%20async%20function%20load%28url%2Cc%2Cn%29%7Bif%28url.endsWith%28%27.ts%27%29%7C%7Curl.endsWith%28%27.tsx%27%29%29%7Bconst%20source%3Dawait%20readFile%28new%20URL%28url%29%2C%27utf8%27%29%3Bconst%20result%3Dts.transpileModule%28source%2C%7BcompilerOptions%3A%7Btarget%3Ats.ScriptTarget.ES2022%2Cmodule%3Ats.ModuleKind.ESNext%2Cjsx%3Ats.JsxEmit.ReactJSX%2CsourceMap%3Afalse%7D%2CfileName%3Aurl%7D%29%3Breturn%7Bformat%3A%27module%27%2Csource%3Aresult.outputText%2CshortCircuit%3Atrue%7D%7Dreturn%20n%28url%2Cc%2Cn%29%7D' --test \"src/**/*.test.ts\"",
+    "build": "tsc --noEmit && npm test && vite build",
+    "check": "tsc --noEmit && npm test && npm --prefix producer test && clojure -M:test",
+    "fixtures": "UPDATE_FIXTURES=1 npm --prefix producer test",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.3.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "three": "^0.179.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/three": "^0.179.0",
+    "@vitejs/plugin-react": "^5.0.2",
+    "typescript": "^5.8.3",
+    "vite": "^7.1.2"
+  }
+}

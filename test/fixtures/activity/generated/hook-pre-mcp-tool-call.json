@@ -1,0 +1,25 @@
+{
+  "id": "hook-adcd36775c825c99907f40e4a3a2ad6f52a37d0d95ffc021c7e12e08eed8382e",
+  "metadata": {
+    "providerEventType": "tool.execution_start",
+    "providerToolCallId": "call-mcp-1"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "docs_search · activity roadmap",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:08.000Z",
+  "tool": "docs_search",
+  "toolCallId": "call-mcp-1",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.DS_Store
+public/graph.json
+.clj-kondo/.cache/
+.cpcache/
+.worktrees/
+producer/.spool/
+producer/.synthetic-spool/
+.lsp/
+/.claude/worktrees/
+/.playwright-mcp/
+/codewalk-current.png

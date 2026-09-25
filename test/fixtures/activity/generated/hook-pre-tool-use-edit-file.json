@@ -1,0 +1,32 @@
+{
+  "id": "hook-4d89b8cb68df51923af8a48d71fb23179ed72ef7d993211be8c2c92bd5f0887a",
+  "metadata": {
+    "providerEventType": "tool.execution_start",
+    "providerToolCallId": "call-edit-1"
+  },
+  "resources": [
+    {
+      "action": "write",
+      "confidence": "observed",
+      "path": "src/app/router.ts"
+    }
+  ],
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "edit_file · path=src/app/router.ts",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:04.000Z",
+  "tool": "edit_file",
+  "toolCallId": "call-edit-1",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

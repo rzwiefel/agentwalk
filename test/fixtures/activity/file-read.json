@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "fixture-file-read",
+  "sessionId": "fixture-session",
+  "timestamp": "2026-08-28T10:00:00.000Z",
+  "type": "tool",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "fixture"
+  },
+  "status": "started",
+  "tool": "read_file",
+  "snippet": "read_file · src/main.clj",
+  "resources": [
+    {
+      "path": "src/main.clj",
+      "action": "read",
+      "confidence": "observed"
+    }
+  ],
+  "metadata": {
+    "providerEventType": "tool.execution_start"
+  }
+}

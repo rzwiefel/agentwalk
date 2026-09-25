@@ -1,0 +1,59 @@
+/*
+ * Activity panel additions for the free signals (roadmap T1-B..T1-F):
+ * session status chips, the completed-tool ring, and the notification opt-in.
+ * Base panel styling still lives in src/styles.css.
+ */
+
+.activity-session-row { flex-wrap: wrap; }
+.activity-session-meta { width: 100%; display: flex; align-items: center; gap: 6px; padding-left: 19px; color: #7182a3; font: 8px 'DM Mono', monospace; }
+.activity-session-meta em { font-style: normal; color: #9aa9c8; }
+
+.activity-chip { flex: 0 0 auto; border: 1px solid currentColor; border-radius: 3px; padding: 1px 4px; font: 8px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .04em; }
+.activity-chip-waiting { color: #ffd166; background: rgba(255, 209, 102, .12); }
+.activity-chip-failed { color: #ff5c68; background: rgba(255, 92, 104, .12); }
+.activity-chip-stalled { color: #c8b184; background: rgba(200, 177, 132, .1); }
+.activity-chip-active { color: #49d8b0; background: rgba(73, 216, 176, .12); }
+.activity-chip-idle { color: #7182a3; background: rgba(113, 130, 163, .1); }
+.activity-chip-ended { color: #52617e; background: transparent; }
+
+/* Event-list dots for the two kinds activityType() newly distinguishes. */
+.activity-permission { color: #ffd166; background: #ffd166; }
+.activity-error { color: #ff5c68; background: #ff5c68; }
+
+.activity-tools { margin-top: 17px; }
+.activity-tool { display: flex; align-items: center; gap: 6px; min-width: 0; padding: 6px 0; border-bottom: 1px solid rgba(147, 169, 224, .08); }
+.activity-tool > div { min-width: 0; flex: 1; }
+.activity-tool strong { color: #b9c8f4; font-size: 9px; font-weight: 500; }
+.activity-tool small { display: block; min-width: 0; overflow: hidden; color: #7182a3; font: 8px 'DM Mono', monospace; text-overflow: ellipsis; white-space: nowrap; }
+.activity-tool-duration { flex: 0 0 auto; color: #52617e; font: 8px 'DM Mono', monospace; }
+.activity-tool-failed strong, .activity-tool-failed .activity-tool-outcome { color: #ff5c68; }
+.activity-tool-outcome { flex: 0 0 auto; font: 8px 'DM Mono', monospace; color: #76ddc0; }
+
+.activity-notify { display: flex; align-items: center; gap: 6px; margin: 13px 0 0; padding: 7px; border: 1px solid rgba(147, 169, 224, .12); border-radius: 4px; color: #9aa9c8; font: 9px 'DM Mono', monospace; cursor: pointer; }
+.activity-notify input { accent-color: #ffd166; }
+.activity-notify small { margin-left: auto; color: #52617e; font-size: 8px; text-align: right; }
+
+.activity-recordings { margin-top: 17px; padding: 10px 0 12px; border-top: 1px solid rgba(147, 169, 224, .12); border-bottom: 1px solid rgba(147, 169, 224, .08); }
+.activity-recordings-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.activity-recordings-heading small { display: block; margin-top: 3px; color: #52617e; font: 8px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .08em; }
+.activity-recordings-refresh { border: 1px solid rgba(147, 169, 224, .2); border-radius: 4px; padding: 4px 6px; color: #9aa9c8; background: rgba(147, 169, 224, .07); font: 8px 'DM Mono', monospace; }
+.activity-recordings-refresh:hover:not(:disabled) { background: rgba(147, 169, 224, .14); }
+.activity-recordings-refresh:disabled { cursor: wait; opacity: .55; }
+.activity-recording-picker { display: grid; gap: 5px; margin-top: 10px; color: #7182a3; font: 8px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .06em; }
+.activity-recording-picker select, .activity-replay-speed select { min-width: 0; border: 1px solid rgba(147, 169, 224, .2); border-radius: 4px; padding: 6px 7px; color: #dce6ff; background: #151f36; font: 9px 'DM Mono', monospace; }
+.activity-recording-summary { display: grid; gap: 3px; margin-top: 9px; padding: 7px; border-left: 2px solid #df8eff; background: rgba(223, 142, 255, .05); }
+.activity-recording-summary strong { color: #d7c7ff; font-size: 9px; font-weight: 500; overflow-wrap: anywhere; }
+.activity-recording-summary small, .activity-replay-current { color: #7182a3; font: 8px 'DM Mono', monospace; }
+.activity-replay-controls { display: grid; gap: 8px; margin-top: 10px; padding: 8px; border: 1px solid rgba(223, 142, 255, .18); border-radius: 5px; background: rgba(223, 142, 255, .04); }
+.activity-replay-progress { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: #9aa9c8; font: 8px 'DM Mono', monospace; text-transform: uppercase; }
+.activity-replay-progress strong { color: #d7c7ff; }
+.activity-replay-buttons { display: flex; flex-wrap: wrap; gap: 4px; }
+.activity-replay-buttons button { border: 1px solid rgba(147, 169, 224, .2); border-radius: 4px; padding: 5px 6px; color: #b9c8f4; background: rgba(147, 169, 224, .08); font: 8px 'DM Mono', monospace; }
+.activity-replay-buttons button:hover:not(:disabled) { background: rgba(147, 169, 224, .16); }
+.activity-replay-buttons button:first-child { border-color: rgba(73, 216, 176, .34); color: #76ddc0; background: rgba(73, 216, 176, .08); }
+.activity-replay-buttons button:nth-child(5) { border-color: rgba(255, 209, 102, .34); color: #ffd166; background: rgba(255, 209, 102, .08); }
+.activity-replay-buttons button:disabled { cursor: not-allowed; opacity: .4; }
+.activity-replay-speed { display: flex; align-items: center; justify-content: space-between; gap: 7px; color: #7182a3; font: 8px 'DM Mono', monospace; text-transform: uppercase; }
+.activity-replay-speed select { width: 82px; padding: 4px 5px; }
+.activity-replay-warning { padding: 6px; border: 1px solid rgba(255, 209, 102, .28); border-radius: 4px; color: #ffd166; font: 8px 'DM Mono', monospace; line-height: 1.4; }
+.activity-replay-error { margin: 8px 0 0; color: #ffaaaa; font: 8px 'DM Mono', monospace; line-height: 1.4; overflow-wrap: anywhere; }

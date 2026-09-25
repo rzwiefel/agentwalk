@@ -1,0 +1,24 @@
+{
+  "schema": "codewalk-csharp-ir",
+  "schemaVersion": 2,
+  "engine": {"name": "roslyn", "version": "4.12.0", "runtime": "dotnet-9"},
+  "input": {"repositoryRoot": "/checkout/csharp", "analysisMode": "full"},
+  "projects": [
+    {"id": "parser/csharp/App/App.csproj", "name": "App", "path": "parser/csharp/App/App.csproj", "language": "C#", "projectReferences": ["parser/csharp/Library/Library.csproj"]}
+  ],
+  "documents": [
+    {"path": "parser/csharp/App/Program.cs", "projectId": "parser/csharp/App/App.csproj", "language": "C#", "length": 32}
+  ],
+  "nodes": [
+    {"id": "var:app", "kind": "var", "name": "Run", "fullyQualifiedName": "Sample.App.Program.Run", "projectId": "parser/csharp/App/App.csproj", "file": "parser/csharp/App/Program.cs", "declarationKind": "Method"},
+    {"id": "var:console", "kind": "var", "name": "WriteLine", "fullyQualifiedName": "System.Console.WriteLine", "projectId": "external:System.Console", "isExternal": true, "declarationKind": "Method"}
+  ],
+  "relationships": [
+    {"id": "r-call", "kind": "calls", "source": "var:app", "target": "var:console", "resolution": {"status": "external", "confidence": 0.98, "engine": "roslyn", "engineVersion": "4.12.0"}},
+    {"id": "r-project", "kind": "project-references", "source": "var:app", "target": "var:console", "resolution": {"status": "resolved", "confidence": 1}}
+  ],
+  "occurrences": [],
+  "diagnostics": [
+    {"severity": "warning", "message": "workspace recovered", "id": "CS0000", "recoverable": true}
+  ]
+}

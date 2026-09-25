@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "fixture-shell-search",
+  "sessionId": "fixture-session",
+  "timestamp": "2026-08-28T10:00:02.000Z",
+  "type": "tool",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "fixture"
+  },
+  "status": "started",
+  "tool": "bash",
+  "snippet": "rg TODO src",
+  "resources": [
+    {
+      "path": "src",
+      "action": "search",
+      "confidence": "observed",
+      "kind": "directory"
+    }
+  ],
+  "metadata": {
+    "providerEventType": "tool.execution_start"
+  }
+}

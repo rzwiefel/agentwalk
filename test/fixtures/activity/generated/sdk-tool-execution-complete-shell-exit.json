@@ -1,0 +1,27 @@
+{
+  "id": "sdk-tool-shell-exit",
+  "metadata": {
+    "bytes": 24,
+    "exitCode": 1,
+    "providerEventType": "tool.execution_complete",
+    "providerToolCallId": "sdk-call-7"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "bash",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "sdk",
+    "version": "1.0.81-fixture"
+  },
+  "status": "completed",
+  "timestamp": "2026-08-28T10:00:28.000Z",
+  "tool": "bash",
+  "toolCallId": "sdk-call-7",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

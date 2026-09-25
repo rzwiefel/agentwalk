@@ -1,0 +1,187 @@
+{
+  "id": "hook-e837b78e0b64022b835a2b1394d24677a2c33bc811dbf3f034f8b1b63b2f2351",
+  "metadata": {
+    "providerEventType": "tool.execution_start",
+    "providerToolCallId": "call-resource-cap"
+  },
+  "resources": [
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-00.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-01.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-02.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-03.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-04.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-05.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-06.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-07.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-08.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-09.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-10.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-11.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-12.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-13.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-14.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-15.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-16.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-17.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-18.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-19.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-20.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-21.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-22.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-23.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-24.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-25.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-26.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-27.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-28.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-29.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-30.ts"
+    },
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/listed/file-31.ts"
+    }
+  ],
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "rg TODO src/searched/dir-00 src/searched/dir-01 src/searched/dir-02 src/searched/dir-03 src/searched/dir-04 src/searched",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:14.000Z",
+  "tool": "bash",
+  "toolCallId": "call-resource-cap",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

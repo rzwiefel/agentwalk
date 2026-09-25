@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "fixture-file-write",
+  "sessionId": "fixture-session",
+  "timestamp": "2026-08-28T10:00:01.000Z",
+  "type": "tool",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "fixture"
+  },
+  "status": "started",
+  "tool": "write_file",
+  "snippet": "write_file · path=src/main.clj",
+  "resources": [
+    {
+      "path": "src/main.clj",
+      "action": "write",
+      "confidence": "observed"
+    }
+  ],
+  "metadata": {
+    "providerEventType": "tool.execution_start"
+  }
+}

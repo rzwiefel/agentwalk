@@ -1,0 +1,25 @@
+{
+  "agentId": "session:fixture-session",
+  "id": "sdk-assistant",
+  "metadata": {
+    "contentAvailable": true,
+    "providerEventType": "assistant.message",
+    "providerMessageId": "message-1"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "sessionName": "Wave 0 conformance",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "sdk",
+    "version": "1.0.81-fixture"
+  },
+  "status": "completed",
+  "timestamp": "2026-08-28T10:00:21.000Z",
+  "type": "assistant",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "id": "hook-c0f8e3fd7aaf42a054a08e714531c8767b573bcbff72fe9b6f6b3225dcc5faa5",
+  "metadata": {
+    "providerEventType": "tool.execution_start",
+    "providerToolCallId": "call-shell-1"
+  },
+  "resources": [
+    {
+      "action": "execute",
+      "confidence": "observed",
+      "path": "src/app"
+    },
+    {
+      "action": "execute",
+      "confidence": "inferred",
+      "kind": "build",
+      "name": "npm"
+    }
+  ],
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "snippet": "npm run build -- --outDir dist",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:06.000Z",
+  "tool": "bash",
+  "toolCallId": "call-shell-1",
+  "type": "tool",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

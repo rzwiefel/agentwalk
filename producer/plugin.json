@@ -1,0 +1,6 @@
+{
+  "name": "codewalk-local-activity",
+  "description": "Privacy-first Codewalk activity hooks for local Copilot CLI sessions",
+  "version": "0.1.0",
+  "hooks": "hooks/hooks.json"
+}

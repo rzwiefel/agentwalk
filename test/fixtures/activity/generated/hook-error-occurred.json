@@ -1,0 +1,24 @@
+{
+  "agentId": "session:fixture-session",
+  "id": "hook-d715411ec45876dfd903634e7909ea3362817bd1bf5eb6e7af070ab5028c9ded",
+  "metadata": {
+    "errorClassification": "timeout",
+    "errorCode": "ETIMEDOUT",
+    "providerEventType": "session.error"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "failed",
+  "timestamp": "2026-08-28T10:00:11.000Z",
+  "type": "error",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}

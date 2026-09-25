@@ -1,0 +1,24 @@
+{
+  "agentId": "session:fixture-session",
+  "agentName": "Luna implementer",
+  "id": "hook-d2b1a1f7e19a9037801ecb38fa2978c46c7767ee33bb151e31d4fb1341c6e3b6",
+  "metadata": {
+    "providerEventType": "session.start"
+  },
+  "schemaVersion": 1,
+  "sessionId": "fixture-session",
+  "sessionName": "Wave 0 conformance",
+  "source": {
+    "client": "copilot-cli",
+    "kind": "hook",
+    "version": "1.0.81-fixture"
+  },
+  "status": "started",
+  "timestamp": "2026-08-28T10:00:00.000Z",
+  "type": "session",
+  "workspace": {
+    "id": "local-17-bccf83d1",
+    "repository": "worktree",
+    "root": "/Users/example/worktree"
+  }
+}
